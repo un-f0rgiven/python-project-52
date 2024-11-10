@@ -10,7 +10,7 @@ python = ">=3.10,<4.0"
 django = "^5.1.2"
 gunicorn = "^23.0.0"
 django-bootstrap5 = "^24.3"
-pytest = "^8.3.3"
+pytest-django = "^4.9.0"
 
 
 [build-system]
