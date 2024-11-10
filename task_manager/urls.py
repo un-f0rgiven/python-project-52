@@ -19,7 +19,7 @@ from django.urls import path
 from task_manager.views import index, user_list, user_create, user_update, user_delete, user_login, user_logout
 
 urlpatterns = [
-    path('', index),
+    path('', index, name='index'),
     path('users/', user_list, name='user_list'),
     path('create/', user_create, name='user_create'),
     path('update/<int:pk>/', user_update, name='user_update'),

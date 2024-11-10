@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
 from django.utils import translation
+from .forms import UserCreateForm, UserUpdateForm
 
 
 def dashboard_view(request):
@@ -25,31 +26,36 @@ def user_list(request):
 
 def user_create(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        User.objects.create_user(username=username, password=password)
-        messages.success(request, 'Пользователь успешно создан.')
-        return redirect('user_list')
-    return render(request, 'task_manager/user_create.html')
+        form = UserCreateForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            messages.success(request, 'Пользователь успешно зарегистрирован.')
+            return redirect('user_login')
+    else:
+        form = UserCreateForm()
+    return render(request, 'task_manager/user_create.html', {'form': form})
 
 
 def user_update(request, pk):
     user = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
-        user.username = request.POST['username']
-        if request.POST.get('password'):
-            user.set_password(request.POST['password'])
-            user.save()
-            messages.success(request, 'Пользователь успешно обновлен.')
+        form = UserUpdateForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Пользователь успешно обновлён.')
             return redirect('user_list')
-        return render(request, 'task_manager/user_update.html', {'user': user})
+    else:
+        form = UserUpdateForm(instance=user)
+    return render(request, 'task_manager/user_update.html', {'form': form, 'user': user})
 
 
 def user_delete(request, pk):
     user = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
         user.delete()
-        messages.success(request, 'Пользователь успешно удален.')
+        messages.success(request, 'Пользователь успешно удалён.')
         return redirect('user_list')
     return render(request, 'task_manager/user_delete.html', {'user': user})
 
@@ -61,7 +67,8 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('user_list')
+            messages.success(request, 'Вы успешно вошли в систему.')
+            return redirect('index')
         else:
             messages.error(request, 'Неверные данные пользователя или пароль.')
     return render(request, 'task_manager/user_login.html')
