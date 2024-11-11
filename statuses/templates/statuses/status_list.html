@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список статусов</title>
+</head>
+<body>
+    <h1>Список статусов</h1>
+    <a href="{% url 'status_create' %}">Добавить новый статус</a>
+    <ul>
+        {% for status in statuses %}
+            <li>
+                {{ status.name }} 
+                <a href="{% url 'status_update' status.pk %}">Изменить</a>
+                <a href="{% url 'status_delete' status.pk %}">Удалить</a>
+            </li>
+        {% empty %}
+            <li>Нет доступных статусов.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
