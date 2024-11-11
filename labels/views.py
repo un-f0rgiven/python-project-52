@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from labels.models import Label
 from labels.forms import LabelForm
-from tasks.models import Task
+
 
 @login_required
 def label_list(request):

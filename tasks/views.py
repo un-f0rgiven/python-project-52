@@ -31,7 +31,6 @@ def task_update(request, pk):
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
-            form.save_m2m()
             messages.success(request, 'Задача успешно обновлена.')
             return redirect('task_list')
     else:

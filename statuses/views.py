@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Status
-from .forms import StatusForm
+from statuses.models import Status
+from statuses.forms import StatusForm
 
 @login_required
 def status_list(request):
