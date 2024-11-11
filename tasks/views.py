@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Task
-from .forms import TaskForm
+from tasks.models import Task
+from tasks.forms import TaskForm
 
 @login_required
 def task_list(request):
@@ -39,6 +39,9 @@ def task_update(request, pk):
 @login_required
 def task_delete(request, pk):
     task = get_object_or_404(Task, pk=pk)
+    if task.author != request.user:
+        messages.error(request, 'У вас нет прав на удаление этой задачи.')
+        return redirect('task_list')
     if request.method == 'POST':
         task.delete()
         messages.success(request, 'Задача успешно удалена.')
