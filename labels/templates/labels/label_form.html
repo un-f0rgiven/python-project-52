@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if label %}Редактировать метку{% else %}Создать новую метку{% endif %}</title>
+</head>
+<body>
+    <h1>{% if label %}Редактировать метку{% else %}Создать новую метку{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% if label %}Сохранить изменения{% else %}Создать метку{% endif %}</button>
+    </form>
+    <a href="{% url 'label_list' %}">Назад к списку меток</a>
+</body>
+</html>
