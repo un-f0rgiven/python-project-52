@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from labels.models import Label
 
 class Task(models.Model):
     STATUS_CHOICES = [
@@ -15,6 +16,7 @@ class Task(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks_created')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    labels = models.ManyToManyField(Label, blank=True, related_name='tasks')
 
     def __str__(self):
         return self.title
