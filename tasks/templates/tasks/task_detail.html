@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детали задачи</title>
+</head>
+<body>
+    <h1>Детали задачи: {{ task.title }}</h1>
+    <p><strong>Описание:</strong> {{ task.description }}</p>
+    <p><strong>Статус:</strong> {{ task.get_status_display }}</p>
+    <p><strong>Назначено:</strong> {{ task.assigned_to.username|default:"Не назначено" }}</p>
+    <p><strong>Создатель:</strong> {{ task.author.username }}</p>
+    <p><strong>Создано:</strong> {{ task.created_at }}</p>
+    <p><strong>Обновлено:</strong> {{ task.updated_at }}</p>
+    <a href="{% url 'task_update' task.pk %}">Редактировать</a>
+    <a href="{% url 'task_delete' task.pk %}">Удалить</a>
+    <a href="{% url 'task_list' %}">Назад к списку задач</a>
+</body>
+</html>
