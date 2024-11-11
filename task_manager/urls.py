@@ -21,5 +21,6 @@ from task_manager.views import index
 urlpatterns = [
     path('', index, name='index'),
     path('users/', include('users.urls')),
+    path('statuses/', include('statuses.urls')),
     path('admin/', admin.site.urls),
 ]
