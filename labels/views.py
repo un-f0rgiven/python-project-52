@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Label
-from .forms import LabelForm
+from django.contrib.auth.decorators import login_required
+from labels.models import Label
+from labels.forms import LabelForm
+from tasks.models import Task
 
+@login_required
 def label_list(request):
     labels = Label.objects.all()
     return render(request, 'labels/label_list.html', {'labels': labels})
 
+@login_required
 def label_create(request):
     if request.method == 'POST':
         form = LabelForm(request.POST)
@@ -18,6 +22,7 @@ def label_create(request):
         form = LabelForm()
     return render(request, 'labels/label_form.html', {'form': form})
 
+@login_required
 def label_update(request, pk):
     label = get_object_or_404(Label, pk=pk)
     if request.method == 'POST':
@@ -30,9 +35,13 @@ def label_update(request, pk):
         form = LabelForm(instance=label)
     return render(request, 'labels/label_form.html', {'form': form, 'label': label})
 
+@login_required
 def label_delete(request, pk):
     label = get_object_or_404(Label, pk=pk)
     if request.method == 'POST':
+        if label.tasks.exists():
+            messages.error(request, 'Невозможно удалить метку, т.к. она связана с задачей.')
+            return redirect('label_list')
         label.delete()
         messages.success(request, 'Метка успешно удалена.')
         return redirect('label_list')

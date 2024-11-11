@@ -15,8 +15,9 @@ def task_create(request):
         form = TaskForm(request.POST)
         if form.is_valid():
             task = form.save(commit=False)
-            task.author = request.user  # Устанавливаем автора
+            task.author = request.user
             task.save()
+            form.save_m2m()
             messages.success(request, 'Задача успешно создана.')
             return redirect('task_list')
     else:
@@ -30,6 +31,7 @@ def task_update(request, pk):
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
+            form.save_m2m()
             messages.success(request, 'Задача успешно обновлена.')
             return redirect('task_list')
     else:
