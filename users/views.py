@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
-from .forms import UserCreateForm, UserUpdateForm
+from users.forms import UserCreateForm, UserUpdateForm
 
-# Create your views here.
+
 def user_list(request):
     users = User.objects.all()
     return render(request, 'users/user_list.html', {'users': users})
