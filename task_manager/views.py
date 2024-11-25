@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.utils import translation
+from django.http import HttpResponse
 
 
 def dashboard_view(request):
@@ -11,6 +12,8 @@ def dashboard_view(request):
 
 
 def index(request):
-    return render(request, 'index.html', context={'name': 'Geralt'})
+    a = None
+    a.hello() # Creating an error with an invalid line of code
+    return HttpResponse("Hello, world. You're at the pollapp index.")
 
 
