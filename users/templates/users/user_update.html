@@ -1,20 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Редактировать пользователя</title>
-</head>
-<body>
-    <h1>Редактировать пользователя: {{ user.username }}</h1>
-    <form method="POST">
-        {% csrf_token %}
-        <label for="username">Имя пользователя:</label>
-        <input type="text" id="username" name="username" value="{{ user.username }}" required>
-        <label for="password">Пароль:</label>
-        <input type="password" id="password" name="password">
-        <button type="submit">Сохранить</button>
-    </form>
-    <a href="{% url 'user_list' %}">Назад</a>
-</body>
-</html>
+{% extends 'task_manager/base.html' %}
+
+{% block title %}Менеджер задач Hexlet{% endblock %}
+
+{% block content %}
+
+<h1 class="my-4">
+        
+  Сюда нужно добавить блок контента
+  
+</h1>
+
+{% endblock %}

@@ -4,8 +4,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
 from users.forms import UserCreateForm, UserUpdateForm
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def user_list(request):
     users = User.objects.all()
     return render(request, 'users/user_list.html', {'users': users})
@@ -15,16 +17,21 @@ def user_create(request):
     if request.method == 'POST':
         form = UserCreateForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
-            user.save()
-            messages.success(request, 'Пользователь успешно зарегистрирован.')
-            return redirect('user_login')
+            username = form.cleaned_data['username']
+            if User.objects.filter(username=username).exists():
+                messages.error(request, 'Пользователь с таким именем уже существует.')
+            else:
+                user = form.save(commit=False)
+                user.set_password(form.cleaned_data['password1'])
+                user.save()
+                messages.success(request, 'Пользователь успешно зарегистрирован.')
+                return redirect('user_login')
     else:
         form = UserCreateForm()
     return render(request, 'users/user_create.html', {'form': form})
 
 
+@login_required
 def user_update(request, pk):
     user = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
@@ -38,6 +45,7 @@ def user_update(request, pk):
     return render(request, 'users/user_update.html', {'form': form, 'user': user})
 
 
+@login_required
 def user_delete(request, pk):
     user = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
@@ -49,12 +57,12 @@ def user_delete(request, pk):
 
 def user_login(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            messages.success(request, 'Вы успешно вошли в систему.')
+            messages.success(request, 'Вы залогинены')
             return redirect('index')
         else:
             messages.error(request, 'Неверные данные пользователя или пароль.')
@@ -63,4 +71,5 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
-    return redirect('user_login')
+    messages.info(request, 'Вы разлогинены')
+    return redirect('index')

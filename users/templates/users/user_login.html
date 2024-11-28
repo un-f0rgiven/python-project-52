@@ -1,20 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход</title>
-</head>
-<body>
-    <h1>Вход</h1>
-    <form method="POST">
-        {% csrf_token %}
-        <label for="username">Имя пользователя:</label>
-        <input type="text" id="username" name="username" required>
-        <label for="password">Пароль:</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit">Войти</button>
-    </form>
-    <a href="{% url 'user_list' %}">Назад</a>
-</body>
-</html>
+{% extends 'task_manager/base.html' %}
+
+{% block title %}Менеджер задач Hexlet{% endblock %}
+
+{% block content %}
+
+<h1 class="my-4">
+        
+  Вход
+  
+</h1>
+
+{% if messages %}
+    <div class="mb-3">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<form method="post">
+  {% csrf_token %}
+  <div class="mb-3"><label class="form-label" for="id_username">Имя пользователя</label><input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" class="form-control" placeholder="Имя пользователя" required id="id_username"></div><div class="mb-3"><label class="form-label" for="id_password">Пароль</label><input type="password" name="password" autocomplete="current-password" class="form-control" placeholder="Пароль" required id="id_password"></div>
+    <input class="btn btn-primary" type="submit" value="Войти">
+</form>
+{% endblock %}
