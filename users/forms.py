@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 class UserCreateForm(forms.ModelForm):
     password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput)
@@ -29,3 +30,9 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name']
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.exclude(pk=self.instance.pk).filter(username=username).exists():
+            raise ValidationError("Пользователь с таким именем уже существует.")
+        return username
