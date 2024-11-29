@@ -11,21 +11,21 @@ def user_list(request):
     users = User.objects.all()
     return render(request, 'users/user_list.html', {'users': users})
 
+
 def user_create(request):
+    print("user_create called")
     if request.method == 'POST':
         form = UserCreateForm(request.POST)
+
         if form.is_valid():
-            username = form.cleaned_data['username']
-            if User.objects.filter(username=username).exists():
-                messages.error(request, 'Пользователь с таким именем уже существует.')
-            else:
-                user = form.save(commit=False)
-                user.set_password(form.cleaned_data['password1'])
-                user.save()
-                messages.success(request, 'Пользователь успешно зарегистрирован.')
-                return redirect('user_login')
+            user = form.save()
+            messages.success(request, 'Пользователь успешно зарегистрирован.')
+            return redirect('user_login')
+        else:
+            pass  
     else:
         form = UserCreateForm()
+    
     return render(request, 'users/user_create.html', {'form': form})
 
 

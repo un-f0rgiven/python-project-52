@@ -17,6 +17,9 @@ class UserCreateForm(forms.ModelForm):
 
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Пароли не совпадают.")
+        
+        if password1 and len(password1) < 3:
+            self.add_error('password2', "Введённый пароль слишком короткий. Он должен содержать как минимум 3 символа.")
 
     def save(self, commit=True):
         user = super().save(commit=False)
