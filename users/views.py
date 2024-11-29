@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib import messages
 from users.forms import UserCreateForm, UserUpdateForm
 from django.contrib.auth.decorators import login_required
+from users.decorators import login_required
 
 
 def user_list(request):
@@ -13,7 +14,6 @@ def user_list(request):
 
 
 def user_create(request):
-    print("user_create called")
     if request.method == 'POST':
         form = UserCreateForm(request.POST)
 
