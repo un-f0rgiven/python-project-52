@@ -44,11 +44,21 @@ def task_create(request):
             task.author = request.user
             task.save()
             form.save_m2m()
-            messages.success(request, 'Задача успешно создана.')
+            messages.success(request, 'Задача успешно создана')
             return redirect('task_list')
     else:
         form = TaskForm()
-    return render(request, 'tasks/task_form.html', {'form': form})
+
+    statuses = Status.objects.all()
+    executors = User.objects.all()
+    labels = Label.objects.all()
+
+    return render(request, 'tasks/task_create.html', {
+        'form': form,
+        'statuses': statuses,
+        'executors': executors,
+        'labels': labels,
+    })
 
 @login_required
 def task_update(request, pk):
@@ -61,7 +71,7 @@ def task_update(request, pk):
             return redirect('task_list')
     else:
         form = TaskForm(instance=task)
-    return render(request, 'tasks/task_form.html', {'form': form, 'task': task})
+    return render(request, 'tasks/task_create.html', {'form': form, 'task': task})
 
 @login_required
 def task_delete(request, pk):

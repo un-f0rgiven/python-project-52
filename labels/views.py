@@ -20,7 +20,7 @@ def label_create(request):
             return redirect('label_list')
     else:
         form = LabelForm()
-    return render(request, 'labels/label_form.html', {'form': form})
+    return render(request, 'labels/label_create.html', {'form': form})
 
 @login_required
 def label_update(request, pk):
@@ -29,11 +29,11 @@ def label_update(request, pk):
         form = LabelForm(request.POST, instance=label)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Метка успешно обновлена.')
+            messages.success(request, 'Метка успешно изменена')
             return redirect('label_list')
     else:
         form = LabelForm(instance=label)
-    return render(request, 'labels/label_form.html', {'form': form, 'label': label})
+    return render(request, 'labels/label_update.html', {'form': form, 'label': label})
 
 @login_required
 def label_delete(request, pk):
@@ -43,6 +43,6 @@ def label_delete(request, pk):
             messages.error(request, 'Невозможно удалить метку, т.к. она связана с задачей.')
             return redirect('label_list')
         label.delete()
-        messages.success(request, 'Метка успешно удалена.')
+        messages.success(request, 'Метка успешно удалена')
         return redirect('label_list')
     return render(request, 'labels/label_confirm_delete.html', {'label': label})

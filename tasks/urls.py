@@ -8,9 +8,9 @@ from .views import (
 )
 
 urlpatterns = [
-    path('tasks/', task_list, name='task_list'),
-    path('tasks/create/', task_create, name='task_create'),
-    path('tasks/<int:pk>/update/', task_update, name='task_update'),
-    path('tasks/<int:pk>/delete/', task_delete, name='task_delete'),
-    path('tasks/<int:pk>/', task_detail, name='task_detail'),
+    path('', task_list, name='task_list'),
+    path('create/', task_create, name='task_create'),
+    path('<int:pk>/update/', task_update, name='task_update'),
+    path('<int:pk>/delete/', task_delete, name='task_delete'),
+    path('<int:pk>/', task_detail, name='task_detail'),
 ]

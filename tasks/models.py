@@ -17,7 +17,7 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     labels = models.ManyToManyField(Label, blank=True, related_name='tasks')
-    assignee = models.ForeignKey(User, related_name='assigned_tasks', on_delete=models.SET_NULL, null=True, blank=True)
+    executor = models.ForeignKey(User, related_name='executors_tasks', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.title

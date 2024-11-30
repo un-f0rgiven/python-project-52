@@ -35,4 +35,35 @@
   </div>
 </div>
 
+<table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Имя</th>
+          <th>Статус</th>
+          <th>Автор</th>
+          <th>Исполнитель</th>
+          <th>Дата создания</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for task in tasks %}
+            <tr>
+              <td>{{ task.id }}</td>
+              <td>{{ task.title}}</td>
+              <td>{{ task.status}}</td>
+              <td>{{ task.author}}</td>
+              <td>{{ task.executor}}</td>
+              <td>{{ task.created_at|date:"d.m.Y H:i" }}</td>
+              <td>
+                <a href="{% url 'task_update' task.pk %}">Изменить</a>
+                <br>
+                <a href="{% url 'task_delete' task.pk %}">Удалить</a>
+              </td>
+            </tr>
+          {% endfor %}
+      </tbody>
+</table>
+
 {% endblock %}
