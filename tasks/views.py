@@ -9,15 +9,18 @@ from tasks.forms import TaskForm
 
 @login_required
 def task_list(request):
-    tasks = Task.objects.filter(author=request.user)
+    tasks = Task.objects.all()
+
+    if request.GET.get('self_tasks'):
+        tasks = tasks.filter(author=request.user)
 
     status_id = request.GET.get('status')
     if status_id:
         tasks = tasks.filter(status_id=status_id)
 
-    assignee_id = request.GET.get('assignee')
-    if assignee_id:
-        tasks = tasks.filter(assignee_id=assignee_id)
+    executor_id = request.GET.get('executor')
+    if executor_id:
+        tasks = tasks.filter(executor_id=executor_id)
 
     label_id = request.GET.get('label')
     if label_id:
@@ -25,13 +28,13 @@ def task_list(request):
 
     statuses = Status.objects.all()
     labels = Label.objects.all()
-    assignees = User.objects.all()
+    executors = User.objects.all()
 
     return render(request, 'tasks/task_list.html', {
         'tasks': tasks,
         'statuses': statuses,
         'labels': labels,
-        'assignees': assignees,
+        'executors': executors,
     })
 
 
@@ -71,7 +74,12 @@ def task_update(request, pk):
             return redirect('task_list')
     else:
         form = TaskForm(instance=task)
-    return render(request, 'tasks/task_create.html', {'form': form, 'task': task})
+    
+    statuses = Status.objects.all()
+    executors = User.objects.all()
+    labels = Label.objects.all()
+
+    return render(request, 'tasks/task_update.html', {'form': form, 'task': task, 'statuses': statuses, 'executors': executors, 'labels': labels,})
 
 @login_required
 def task_delete(request, pk):
