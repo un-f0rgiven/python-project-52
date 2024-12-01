@@ -7,6 +7,9 @@ readme = "README.md"
 packages = [
   { include = "task_manager" },
   { include = "users" },
+  { include = "statuses" },
+  { include = "labels" },
+  { include = "tasks" },
 ]
 
 [tool.poetry.dependencies]
