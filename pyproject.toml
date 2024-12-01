@@ -6,6 +6,7 @@ authors = ["un-f0rgiven <barr85@mail.ru>"]
 readme = "README.md"
 packages = [
   { include = "task_manager" },
+  { include = "users" },
 ]
 
 [tool.poetry.dependencies]
@@ -15,6 +16,7 @@ gunicorn = "^23.0.0"
 django-bootstrap5 = "^24.3"
 pytest-django = "^4.9.0"
 rollbar = "^1.1.0"
+flake8 = "^7.1.1"
 
 
 [build-system]
