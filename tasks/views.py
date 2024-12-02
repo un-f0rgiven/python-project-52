@@ -92,8 +92,3 @@ def task_delete(request, pk):
         messages.success(request, 'Задача успешно удалена.')
         return redirect('task_list')
     return render(request, 'tasks/task_confirm_delete.html', {'task': task})
-
-@login_required
-def task_detail(request, pk):
-    task = get_object_or_404(Task, pk=pk)
-    return render(request, 'tasks/task_detail.html', {'task': task})
