@@ -94,7 +94,9 @@ WSGI_APPLICATION = 'task_manager.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASE_URL = os.getenv('DATABASE_URL')
-
+print("DEBUG:", DEBUG)
+print("DATABASE_URL:", DATABASE_URL)
+print("DATABASES:", DATABASES)
 if DEBUG:
     DATABASES = {
         'default': {
