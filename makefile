@@ -6,7 +6,7 @@ install:
 
 start:
 	@if [ -z "$$PORT" ]; then echo "Ошибка: Переменная окружения PORT не задана!"; exit 1; fi
-	poetry run gunicorn -w 5 -b 0.0.0.0:$(PORT) task_manager.wsgi:application
+	poetry run gunicorn task_manager.wsgi:application
 
 test:
 	poetry run pytest
