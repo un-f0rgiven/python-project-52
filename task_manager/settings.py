@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'task_manager.wsgi.application'
 DATABASE_URL = os.getenv('DATABASE_URL')
 print("DEBUG:", DEBUG)
 print("DATABASE_URL:", DATABASE_URL)
-print("DATABASES:", DATABASES)
+
 if DEBUG:
     DATABASES = {
         'default': {
@@ -114,6 +114,7 @@ else:
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
+print("DATABASES:", DATABASES)
 # Authentication
 
 LOGIN_URL = 'user_login'
