@@ -10,6 +10,8 @@ def dashboard_view(request):
 
     return render(request, 'task_manager/dashboard.html')
 
+def favicon_view(request):
+    return HttpResponse(status=204)
 
 def index(request):
     return render(request, 'task_manager/index.html')
