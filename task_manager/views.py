@@ -18,4 +18,3 @@ def favicon_view(request):
 def index(request):
     return render(request, 'task_manager/index.html')
 
-
