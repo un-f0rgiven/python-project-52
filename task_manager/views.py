@@ -14,6 +14,7 @@ def dashboard_view(request):
 def favicon_view(request):
     return HttpResponse(status=204)
 
+
 def index(request):
     return render(request, 'task_manager/index.html')
 
