@@ -97,24 +97,31 @@ DATABASE_URL = os.getenv('DATABASE_URL')
 print("DEBUG:", DEBUG)
 print("DATABASE_URL:", DATABASE_URL)
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-else:
-    DATABASES = {
-        'default': dj_database_url.config(default=DATABASE_URL)
-        # 'default': {
-        # 'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': 'mydb',
-        # 'USER': 'alexander',
-        # 'PASSWORD': '123456',
-        # 'HOST': '127.0.0.1',
-        # 'PORT': '5432',
-    }
+}
+
+# if DEBUG:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
+# else:
+#     DATABASES = {
+#         'default': dj_database_url.config(default=DATABASE_URL)
+#         # 'default': {
+#         # 'ENGINE': 'django.db.backends.postgresql',
+#         # 'NAME': 'mydb',
+#         # 'USER': 'alexander',
+#         # 'PASSWORD': '123456',
+#         # 'HOST': '127.0.0.1',
+#         # 'PORT': '5432',
+#     }
 
 print("DATABASES:", DATABASES)
 # Authentication
