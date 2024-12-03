@@ -106,14 +106,14 @@ if DEBUG:
     }
 else:
     DATABASES = {
-        # 'default': dj_database_url.config(default=DATABASE_URL)
-        'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydb',
-        'USER': 'alexander',
-        'PASSWORD': '123456',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'default': dj_database_url.config(default=DATABASE_URL)
+        # 'default': {
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'mydb',
+        # 'USER': 'alexander',
+        # 'PASSWORD': '123456',
+        # 'HOST': '127.0.0.1',
+        # 'PORT': '5432',
     }
 }
 print("DATABASES:", DATABASES)
