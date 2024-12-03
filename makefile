@@ -4,6 +4,8 @@ dev:
 install:
 	poetry install
 
+PORT ?= 10000
+
 start:
 	poetry install
 	@if [ -z "$$PORT" ]; then echo "Ошибка: Переменная окружения PORT не задана!"; exit 1; fi
