@@ -39,8 +39,9 @@ def user_update(request, pk):
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=user)
         password1 = request.POST.get('password1')
+        print(f'password1: {password1}')
         password2 = request.POST.get('password2')
-
+        print(f'password2: {password2}')
         if form.is_valid():
             if user.check_password(password1) and password1 == password2:
                 form.save()
