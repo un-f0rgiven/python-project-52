@@ -21,4 +21,10 @@ lint:
 	poetry run flake8
 
 build:
-	./build.sh 
+	./build.sh
+
+migrations:
+	poetry run python manage.py makemigrations
+
+migrate:
+	poetry run python manage.py migrate
