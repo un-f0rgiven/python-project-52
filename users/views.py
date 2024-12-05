@@ -50,7 +50,7 @@ def user_update(request, pk):
             # else:
             #     messages.error(request, 'Пароль неверный или пароли не совпадают. Попробуйте снова.')
             form.save()
-            messages.success(request, 'Ваши данные успешно обновлены.')
+            messages.success(request, 'Пользователь успешно изменен')
             return redirect('user_list')
     else:
         form = UserUpdateForm(instance=user)
