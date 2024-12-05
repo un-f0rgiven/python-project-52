@@ -43,12 +43,15 @@ def user_update(request, pk):
         password2 = request.POST.get('password2')
         print(f'password2: {password2}')
         if form.is_valid():
-            if user.check_password(password1) and password1 == password2:
-                form.save()
-                messages.success(request, 'Ваши данные успешно обновлены.')
-                return redirect('user_list')
-            else:
-                messages.error(request, 'Пароль неверный или пароли не совпадают. Попробуйте снова.')
+            # if user.check_password(password1) and password1 == password2:
+                # form.save()
+                # messages.success(request, 'Ваши данные успешно обновлены.')
+                # return redirect('user_list')
+            # else:
+            #     messages.error(request, 'Пароль неверный или пароли не совпадают. Попробуйте снова.')
+            form.save()
+            messages.success(request, 'Ваши данные успешно обновлены.')
+            return redirect('user_list')
     else:
         form = UserUpdateForm(instance=user)
 
