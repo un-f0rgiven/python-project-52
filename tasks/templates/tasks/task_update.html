@@ -10,9 +10,9 @@
     {% csrf_token %}
     
     <div class="mb-3">
-        <label class="form-label" for="{{ form.title.id_for_label }}">Имя</label>
-        <input type="text" name="id_name" maxlength="150" class="form-control{% if form.title.errors %} is-invalid{% endif %}" placeholder="Имя" required id="{{ form.title.id_for_label }}" value="{{ form.title.value }}">
-        {% for error in form.title.errors %}
+        <label class="form-label" for="id_name">Имя</label>
+        <input type="text" name="name" maxlength="150" class="form-control{% if form.name.errors %} is-invalid{% endif %}" placeholder="Имя" required id="id_name" value="{{ form.name.value }}">
+        {% for error in form.name.errors %}
             <div class="invalid-feedback">{{ error }}</div>
         {% endfor %}
     </div>
