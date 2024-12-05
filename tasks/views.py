@@ -49,6 +49,8 @@ def task_create(request):
             form.save_m2m()
             messages.success(request, 'Задача успешно создана')
             return redirect('task_list')
+        else:
+            print(form.errors)
     else:
         form = TaskForm()
 
