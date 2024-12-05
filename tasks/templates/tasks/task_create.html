@@ -34,7 +34,7 @@
         <select name="executor" class="form-select" id="id_executor">
             <option value="" selected>---------</option>
             {% for executor in executors %}
-                <option value="{{ executor.id }}">{{ executor.username }}</option>
+                <option value="{{ executor.id }}">{{ executor.first_name }} {{ executor.last_name }}</option>
             {% endfor %}
         </select>
     </div>
