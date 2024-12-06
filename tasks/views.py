@@ -75,7 +75,7 @@ def task_update(request, pk):
     title = Task.objects.all()
     statuses = Status.objects.all()
     executors = User.objects.all()
-    labels = Label.objects.all()
+    labels = Label.objects.all().order_by('name')
 
     return render(request, 'tasks/task_update.html', {'form': form, 'task': task, 'title': title, 'statuses': statuses, 'executors': executors, 'labels': labels,})
 
