@@ -6,37 +6,32 @@ from statuses.models import Status
 from labels.models import Label
 from django.contrib.auth.models import User
 from tasks.forms import TaskForm
+from tasks.filters import TaskFilter
 
 @login_required
 def task_list(request):
     tasks = Task.objects.all()
+    
+    # Создание фильтра с текущими GET параметрами
+    task_filter = TaskFilter(request.GET, queryset=tasks)
 
+    # Если выбраны только свои задачи, добавляем это условие
     if request.GET.get('self_tasks'):
-        tasks = tasks.filter(author=request.user)
+        tasks = tasks.filter(author=request.user)  # Фильтруем только свои задачи
 
-    status_id = request.GET.get('status')
-    if status_id:
-        tasks = tasks.filter(status_id=status_id)
-
-    executor_id = request.GET.get('executor')
-    if executor_id:
-        tasks = tasks.filter(executor_id=executor_id)
-
-    label_id = request.GET.get('label')
-    if label_id:
-        tasks = tasks.filter(labels__id=label_id).distinct()
+    # Применяем фильтры из TaskFilter
+    tasks = task_filter.qs  # Теперь tasks уже отфильтрованы
 
     statuses = Status.objects.all()
     labels = Label.objects.all()
     executors = User.objects.all()
 
     return render(request, 'tasks/task_list.html', {
-        'tasks': tasks,
+        'filter': task_filter,  # Передаем фильтр в шаблон
         'statuses': statuses,
         'labels': labels,
         'executors': executors,
     })
-
 
 @login_required
 def task_create(request):
