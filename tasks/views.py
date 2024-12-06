@@ -72,11 +72,12 @@ def task_update(request, pk):
     else:
         form = TaskForm(instance=task)
     
+    title = Task.objects.all()
     statuses = Status.objects.all()
     executors = User.objects.all()
     labels = Label.objects.all()
 
-    return render(request, 'tasks/task_update.html', {'form': form, 'task': task, 'statuses': statuses, 'executors': executors, 'labels': labels,})
+    return render(request, 'tasks/task_update.html', {'form': form, 'task': task, 'title': title, 'statuses': statuses, 'executors': executors, 'labels': labels,})
 
 
 @login_required
