@@ -94,15 +94,6 @@ WSGI_APPLICATION = 'task_manager.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASE_URL = os.getenv('DATABASE_URL')
-print("DEBUG:", DEBUG)
-print("DATABASE_URL:", DATABASE_URL)
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 if DATABASE_URL:
     DATABASES = {
@@ -116,7 +107,6 @@ else:
         }
     }
 
-print("DATABASES:", DATABASES)
 # Authentication
 
 LOGIN_URL = 'user_login'
