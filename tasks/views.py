@@ -8,30 +8,29 @@ from django.contrib.auth.models import User
 from tasks.forms import TaskForm
 from tasks.filters import TaskFilter
 
+
 @login_required
 def task_list(request):
     tasks = Task.objects.all()
-    
-    # Создание фильтра с текущими GET параметрами
+
     task_filter = TaskFilter(request.GET, queryset=tasks)
 
-    # Если выбраны только свои задачи, добавляем это условие
     if request.GET.get('self_tasks'):
-        tasks = tasks.filter(author=request.user)  # Фильтруем только свои задачи
+        tasks = tasks.filter(author=request.user)
 
-    # Применяем фильтры из TaskFilter
-    tasks = task_filter.qs  # Теперь tasks уже отфильтрованы
+    tasks = task_filter.qs
 
     statuses = Status.objects.all()
     labels = Label.objects.all()
     executors = User.objects.all()
 
     return render(request, 'tasks/task_list.html', {
-        'filter': task_filter,  # Передаем фильтр в шаблон
+        'filter': task_filter,
         'statuses': statuses,
         'labels': labels,
         'executors': executors,
     })
+
 
 @login_required
 def task_create(request):
@@ -60,6 +59,7 @@ def task_create(request):
         'labels': labels,
     })
 
+
 @login_required
 def task_update(request, pk):
     task = get_object_or_404(Task, pk=pk)
@@ -71,13 +71,24 @@ def task_update(request, pk):
             return redirect('task_list')
     else:
         form = TaskForm(instance=task)
-    
+
     title = Task.objects.all()
     statuses = Status.objects.all()
     executors = User.objects.all()
     labels = Label.objects.all()
 
-    return render(request, 'tasks/task_update.html', {'form': form, 'task': task, 'title': title, 'statuses': statuses, 'executors': executors, 'labels': labels,})
+    return render(
+        request,
+        'tasks/task_update.html',
+        {
+            'form': form,
+            'task': task,
+            'title': title,
+            'statuses': statuses,
+            'executors': executors,
+            'labels': labels,
+        }
+    )
 
 
 @login_required
@@ -91,6 +102,7 @@ def task_delete(request, pk):
         messages.success(request, 'Задача успешно удалена.')
         return redirect('task_list')
     return render(request, 'tasks/task_confirm_delete.html', {'task': task})
+
 
 @login_required
 def task_show(request, pk):
