@@ -84,7 +84,7 @@ def task_update(request, pk):
 def task_delete(request, pk):
     task = get_object_or_404(Task, pk=pk)
     if task.author != request.user:
-        messages.error(request, 'У вас нет прав на удаление этой задачи.')
+        messages.error(request, 'Задачу может удалить только ее автор')
         return redirect('task_list')
     if request.method == 'POST':
         task.delete()
