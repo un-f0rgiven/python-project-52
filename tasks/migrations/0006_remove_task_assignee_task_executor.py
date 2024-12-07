@@ -20,6 +20,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='task',
             name='executor',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='executor_tasks', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name='executor_tasks',
+                to=settings.AUTH_USER_MODEL
+            ),
         ),
     ]
