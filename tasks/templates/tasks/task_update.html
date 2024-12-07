@@ -49,8 +49,8 @@
     </div>
     
     <div class="mb-3">
-        <label class="form-label" for="{{ form.labels.id_for_label }}">Метки</label>
-        <select name="labels" class="form-select" id="{{ form.labels.id_for_label }}" multiple>
+        <label class="form-label" for="id_labels">Метки</label>
+        <select name="labels" class="form-select" id="id_labels" multiple>
             {% for label in labels %}
                 <option value="{{ label.id }}" {% if label.id in form.labels.value %}selected{% endif %}>{{ label.name }}</option>
             {% endfor %}

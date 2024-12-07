@@ -6,4 +6,4 @@ class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ['title', 'description', 'status', 'labels', 'executor']
-        widgets = {'labels': forms.CheckboxSelectMultiple(),}
+        widgets = {'labels': forms.CheckboxSelectMultiple(attrs={'id': 'id_labels'}),}
