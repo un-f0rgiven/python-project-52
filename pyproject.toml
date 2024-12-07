@@ -36,6 +36,3 @@ build-backend = "poetry.core.masonry.api"
 profile = "black" 
 line_length = 80
 known_third_party = ["flask", "django"]
-
-[tool.ruff]
-select = ["E", "W", "I", "C90"] 

@@ -6,11 +6,6 @@ from statuses.models import Status
 
 
 class Task(models.Model):
-    STATUS_CHOICES = [
-        ('new', 'Новая'),
-        ('in_progress', 'В процессе'),
-        ('completed', 'Завершена'),
-    ]
 
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
