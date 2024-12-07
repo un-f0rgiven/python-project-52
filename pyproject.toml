@@ -24,8 +24,18 @@ psycopg2-binary = "^2.9.10"
 python-dotenv = "^1.0.1"
 dj-database-url = "^2.3.0"
 django-filter = "^24.3"
+isort = "^5.13.2"
+ruff = "^0.8.2"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black" 
+line_length = 80
+known_third_party = ["flask", "django"]
+
+[tool.ruff]
+select = ["E", "W", "I", "C90"] 

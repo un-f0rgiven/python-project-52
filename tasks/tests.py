@@ -1,10 +1,11 @@
+from django.contrib.auth.models import User
+from django.contrib.messages import get_messages
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth.models import User
-from tasks.models import Task
-from statuses.models import Status
+
 from labels.models import Label
-from django.contrib.messages import get_messages
+from statuses.models import Status
+from tasks.models import Task
 
 
 class TaskViewsTests(TestCase):

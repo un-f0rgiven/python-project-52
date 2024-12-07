@@ -1,7 +1,7 @@
-from django.contrib.auth.decorators import (
-    login_required as default_login_required
-)
 from django.contrib import messages
+from django.contrib.auth.decorators import (
+    login_required as default_login_required,
+)
 from django.shortcuts import redirect
 
 

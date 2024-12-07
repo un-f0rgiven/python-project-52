@@ -1,12 +1,13 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from tasks.models import Task
-from statuses.models import Status
-from labels.models import Label
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from tasks.forms import TaskForm
+from django.shortcuts import get_object_or_404, redirect, render
+
+from labels.models import Label
+from statuses.models import Status
 from tasks.filters import TaskFilter
+from tasks.forms import TaskForm
+from tasks.models import Task
 
 
 @login_required

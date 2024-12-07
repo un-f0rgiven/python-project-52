@@ -1,11 +1,12 @@
 from django.urls import path
+
 from users.views import (
-    user_list,
     user_create,
-    user_update,
     user_delete,
+    user_list,
     user_login,
-    user_logout
+    user_logout,
+    user_update,
 )
 
 urlpatterns = [
