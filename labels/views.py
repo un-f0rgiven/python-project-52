@@ -38,10 +38,12 @@ def label_update(request, pk):
 @login_required
 def label_delete(request, pk):
     label = get_object_or_404(Label, pk=pk)
+
     if request.method == 'POST':
         if label.tasks.exists():
             messages.error(request, 'Невозможно удалить метку, т.к. она связана с задачей.')
             return redirect('label_list')
+        
         label.delete()
         messages.success(request, 'Метка успешно удалена')
         return redirect('label_list')
