@@ -63,7 +63,7 @@ def user_delete(request, pk):
     user = get_object_or_404(User, pk=pk)
     
     if request.user != user:
-        messages.error(request, "У вас нет прав для удаления другого пользователя.")
+        messages.error(request, "У вас нет прав для изменения")
         return redirect('user_list')
 
     if request.method == 'POST':
