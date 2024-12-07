@@ -54,7 +54,7 @@ class TaskViewsTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(self.task.title, 'Updated Task')
         messages_list = list(get_messages(response.wsgi_request))
-        self.assertIn('Задача успешно обновлена.', [m.message for m in messages_list])
+        self.assertIn('Задача успешно изменена.', [m.message for m in messages_list])
 
     def test_task_delete_view(self):
         response = self.client.post(reverse('task_delete', args=[self.task.pk]))
@@ -72,4 +72,4 @@ class TaskViewsTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Task.objects.filter(pk=self.task.pk).exists())
         messages_list = list(get_messages(response.wsgi_request))
-        self.assertIn('У вас нет прав на удаление этой задачи.', [m.message for m in messages_list])
+        self.assertIn('Задачу может удалить только ее автор', [m.message for m in messages_list])

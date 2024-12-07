@@ -2,13 +2,23 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
+
 class UserCreateForm(forms.ModelForm):
     password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Подтверждение пароля', widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label='Подтверждение пароля',
+        widget=forms.PasswordInput
+    )
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'password1', 'password2']
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'password1',
+            'password2'
+        ]
 
     def clean(self):
         cleaned_data = super().clean()
@@ -17,9 +27,13 @@ class UserCreateForm(forms.ModelForm):
 
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Пароли не совпадают.")
-        
+
         if password1 and len(password1) < 3:
-            self.add_error('password2', "Введённый пароль слишком короткий. Он должен содержать как минимум 3 символа.")
+            self.add_error(
+                'password2',
+                "Введённый пароль слишком короткий. "
+                "Он должен содержать как минимум 3 символа."
+            )
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -36,6 +50,10 @@ class UserUpdateForm(forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data['username']
-        if User.objects.exclude(pk=self.instance.pk).filter(username=username).exists():
+        if User.objects.exclude(
+            pk=self.instance.pk
+        ).filter(
+            username=username
+        ).exists():
             raise ValidationError("Пользователь с таким именем уже существует.")
         return username

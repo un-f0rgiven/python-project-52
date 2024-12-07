@@ -1,14 +1,16 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
-from django.contrib import messages
 from django.contrib.messages import get_messages
+
 
 class UserViewsTests(TestCase):
 
     def setUp(self):
-        # Создание тестового пользователя
-        self.user = User.objects.create_user(username='testuser', password='testpass')
+        self.user = User.objects.create_user(
+            username='testuser',
+            password='testpass'
+        )
 
     def test_user_list_view(self):
         response = self.client.get(reverse('user_list'))
@@ -22,23 +24,32 @@ class UserViewsTests(TestCase):
             'password1': 'newpassword',
             'password2': 'newpassword'
         })
-        self.assertEqual(response.status_code, 302)  # Проверка перенаправления
+        self.assertEqual(response.status_code, 302)
         self.assertTrue(User.objects.filter(username='newuser').exists())
         messages_list = list(get_messages(response.wsgi_request))
-        self.assertIn('Пользователь успешно зарегистрирован.', [m.message for m in messages_list])
+        self.assertIn(
+            'Пользователь успешно зарегистрирован.',
+            [m.message for m in messages_list]
+        )
 
     def test_user_update_view(self):
         self.client.login(username='testuser', password='testpass')
-        response = self.client.post(reverse('user_update', args=[self.user.pk]), {
-            'username': 'updateduser',
-            'password': 'testpass',
-            'password2': 'testpass'
-        })
+        response = self.client.post(
+            reverse('user_update', args=[self.user.pk]),
+            {
+                'username': 'updateduser',
+                'password': 'testpass',
+                'password2': 'testpass'
+            }
+        )
         self.user.refresh_from_db()
         self.assertEqual(response.status_code, 302)
         self.assertEqual(self.user.username, 'updateduser')
         messages_list = list(get_messages(response.wsgi_request))
-        self.assertIn('Ваши данные успешно обновлены.', [m.message for m in messages_list])
+        self.assertIn(
+            'Пользователь успешно изменен',
+            [m.message for m in messages_list]
+        )
 
     def test_user_delete_view(self):
         self.client.login(username='testuser', password='testpass')
@@ -46,7 +57,10 @@ class UserViewsTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertFalse(User.objects.filter(username='testuser').exists())
         messages_list = list(get_messages(response.wsgi_request))
-        self.assertIn('Пользователь успешно удален', [m.message for m in messages_list])
+        self.assertIn(
+            'Пользователь успешно удален',
+            [m.message for m in messages_list]
+        )
 
     def test_user_login_view(self):
         response = self.client.post(reverse('user_login'), {

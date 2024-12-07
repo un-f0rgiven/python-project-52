@@ -1,10 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
 from django.contrib import messages
 from users.forms import UserCreateForm, UserUpdateForm
-from django.contrib.auth.decorators import login_required
 from users.decorators import login_required
 
 
@@ -18,14 +16,14 @@ def user_create(request):
         form = UserCreateForm(request.POST)
 
         if form.is_valid():
-            user = form.save()
+            form.save()
             messages.success(request, 'Пользователь успешно зарегистрирован.')
             return redirect('user_login')
         else:
-            pass  
+            pass
     else:
         form = UserCreateForm()
-    
+
     return render(request, 'users/user_create.html', {'form': form})
 
 
@@ -33,7 +31,10 @@ def user_create(request):
 def user_update(request, pk):
     user = get_object_or_404(User, pk=pk)
     if request.user != user:
-        messages.error(request, "У вас нет прав для изменения другого пользователя.")
+        messages.error(
+            request,
+            "У вас нет прав для изменения другого пользователя."
+        )
         return redirect('user_list')
 
     if request.method == 'POST':
@@ -43,25 +44,23 @@ def user_update(request, pk):
         password2 = request.POST.get('password2')
         print(f'password2: {password2}')
         if form.is_valid():
-            # if user.check_password(password1) and password1 == password2:
-                # form.save()
-                # messages.success(request, 'Ваши данные успешно обновлены.')
-                # return redirect('user_list')
-            # else:
-            #     messages.error(request, 'Пароль неверный или пароли не совпадают. Попробуйте снова.')
             form.save()
             messages.success(request, 'Пользователь успешно изменен')
             return redirect('user_list')
     else:
         form = UserUpdateForm(instance=user)
 
-    return render(request, 'users/user_update.html', {'form': form, 'user': user})
+    return render(
+        request,
+        'users/user_update.html',
+        {'form': form, 'user': user}
+    )
 
 
 @login_required
 def user_delete(request, pk):
     user = get_object_or_404(User, pk=pk)
-    
+
     if request.user != user:
         messages.error(request, "У вас нет прав для изменения")
         return redirect('user_list')
@@ -86,6 +85,7 @@ def user_login(request):
         else:
             messages.error(request, 'Неверные данные пользователя или пароль.')
     return render(request, 'users/user_login.html')
+
 
 def user_logout(request):
     logout(request)
