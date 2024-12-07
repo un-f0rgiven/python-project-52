@@ -4,10 +4,12 @@ from django.contrib import messages
 from statuses.models import Status
 from statuses.forms import StatusForm
 
+
 @login_required
 def status_list(request):
     statuses = Status.objects.all()
     return render(request, 'statuses/status_list.html', {'statuses': statuses})
+
 
 @login_required
 def status_create(request):
@@ -20,6 +22,7 @@ def status_create(request):
     else:
         form = StatusForm()
     return render(request, 'statuses/status_create.html', {'form': form})
+
 
 @login_required
 def status_update(request, pk):
@@ -34,6 +37,7 @@ def status_update(request, pk):
         form = StatusForm(instance=status)
     return render(request, 'statuses/status_update.html', {'form': form})
 
+
 @login_required
 def status_delete(request, pk):
     status = get_object_or_404(Status, pk=pk)
@@ -46,5 +50,9 @@ def status_delete(request, pk):
         status.delete()
         messages.success(request, 'Статус успешно удален')
         return redirect('status_list')
-    
-    return render(request, 'statuses/status_confirm_delete.html', {'status': status})
+
+    return render(
+        request,
+        'statuses/status_confirm_delete.html',
+        {'status': status}
+    )
