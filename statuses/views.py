@@ -37,8 +37,14 @@ def status_update(request, pk):
 @login_required
 def status_delete(request, pk):
     status = get_object_or_404(Status, pk=pk)
+    
+    if status.tasks.exists():
+        messages.error(request, 'Невозможно удалить статус')
+        return redirect('status_list')
+
     if request.method == 'POST':
         status.delete()
         messages.success(request, 'Статус успешно удален')
         return redirect('status_list')
+    
     return render(request, 'statuses/status_confirm_delete.html', {'status': status})
