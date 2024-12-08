@@ -32,7 +32,12 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['webserver','127.0.0.1', 'task-manager-yoqv.onrender.com', 'localhost']
+ALLOWED_HOSTS = [
+    'webserver',
+    '127.0.0.1',
+    'task-manager-yoqv.onrender.com',
+    'localhost'
+]
 
 
 # Application definition
@@ -125,13 +130,16 @@ AUTH_PASSWORD_VALIDATORS = [
                 'UserAttributeSimilarityValidator'),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': ('django.contrib.auth.password_validation.'
+                'MinimumLengthValidator'),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': ('django.contrib.auth.password_validation.'
+                'CommonPasswordValidator'),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': ('django.contrib.auth.password_validation.'
+                'NumericPasswordValidator'),
     },
 ]
 
