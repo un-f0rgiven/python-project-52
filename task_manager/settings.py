@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY', secrets.token_urlsafe(32))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
@@ -39,7 +39,6 @@ ALLOWED_HOSTS = [
     'task-manager-yoqv.onrender.com',
     'localhost'
 ]
-
 
 # Application definition
 
@@ -82,7 +81,7 @@ ROOT_URLCONF = 'task_manager.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -108,7 +107,6 @@ if DATABASE_URL:
         'default': dj_database_url.config(default=DATABASE_URL)
     }
 else:
-
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',

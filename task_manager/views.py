@@ -4,7 +4,7 @@ from django.utils import translation
 
 
 def dashboard_view(request):
-    user_language = 'ru'
+    user_language = request.GET.get('language', 'ru')
     translation.activate(user_language)
     request.LANGUAGE_CODE = user_language
 
