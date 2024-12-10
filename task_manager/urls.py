@@ -17,8 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from task_manager.views import favicon_view, index
 from task_manager.users.views import user_login
+from task_manager.views import favicon_view, index
 
 urlpatterns = [
     path('', index, name='index'),

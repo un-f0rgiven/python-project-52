@@ -1,6 +1,11 @@
 from django.urls import path
 
-from task_manager.statuses.views import status_create, status_delete, status_list, status_update
+from task_manager.statuses.views import (
+    status_create,
+    status_delete,
+    status_list,
+    status_update,
+)
 
 urlpatterns = [
     path('', status_list, name='status_list'),
