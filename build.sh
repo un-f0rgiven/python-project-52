@@ -9,4 +9,4 @@ fi
 make install
 
 # Загрузка SQL-файла в подключенную базу данных
-psql -a -d "$DATABASE_URL" -f database.sql
+# psql -a -d "$DATABASE_URL" -f db.sqlite3
