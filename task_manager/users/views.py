@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
 
-from users.decorators import login_required
-from users.forms import UserCreateForm, UserUpdateForm
+from task_manager.users.decorators import login_required
+from task_manager.users.forms import UserCreateForm, UserUpdateForm
 
 
 def user_list(request):

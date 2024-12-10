@@ -18,15 +18,15 @@ from django.contrib import admin
 from django.urls import include, path
 
 from task_manager.views import favicon_view, index
-from users.views import user_login
+from task_manager.users.views import user_login
 
 urlpatterns = [
     path('', index, name='index'),
     path('favicon.ico', favicon_view),
-    path('users/', include('users.urls')),
+    path('users/', include('task_manager.users.urls')),
     path('login/', user_login, name='user_login'),
-    path('statuses/', include('statuses.urls')),
-    path('tasks/', include('tasks.urls')),
-    path('labels/', include('labels.urls')),
+    path('statuses/', include('task_manager.statuses.urls')),
+    path('tasks/', include('task_manager.tasks.urls')),
+    path('labels/', include('task_manager.labels.urls')),
     path('admin/', admin.site.urls),
 ]

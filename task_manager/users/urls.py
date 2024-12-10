@@ -1,6 +1,6 @@
 from django.urls import path
 
-from users.views import (
+from task_manager.users.views import (
     user_create,
     user_delete,
     user_list,

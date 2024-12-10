@@ -2,8 +2,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from labels.forms import LabelForm
-from labels.models import Label
+from task_manager.labels.forms import LabelForm
+from task_manager.labels.models import Label
 
 
 @login_required

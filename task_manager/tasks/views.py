@@ -3,11 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
 
-from labels.models import Label
-from statuses.models import Status
-from tasks.filters import TaskFilter
-from tasks.forms import TaskForm
-from tasks.models import Task
+from task_manager.labels.models import Label
+from task_manager.statuses.models import Status
+from task_manager.tasks.filters import TaskFilter
+from task_manager.tasks.forms import TaskForm
+from task_manager.tasks.models import Task
 
 
 @login_required
