@@ -1,19 +1,20 @@
+from django.views import View
+from django.views.generic import TemplateView
 from django.http import HttpResponse
-from django.shortcuts import render
 from django.utils import translation
 
+class DashboardView(TemplateView):
+    template_name = 'task_manager/dashboard.html'
 
-def dashboard_view(request):
-    user_language = request.GET.get('language', 'ru')
-    translation.activate(user_language)
-    request.LANGUAGE_CODE = user_language
+    def get(self, request, *args, **kwargs):
+        user_language = request.GET.get('language', 'ru')
+        translation.activate(user_language)
+        request.LANGUAGE_CODE = user_language
+        return super().get(request, *args, **kwargs)
 
-    return render(request, 'task_manager/dashboard.html')
+class FaviconView(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse(status=204)
 
-
-def favicon_view(request):
-    return HttpResponse(status=204)
-
-
-def index(request):
-    return render(request, 'task_manager/index.html')
+class IndexView(TemplateView):
+    template_name = 'task_manager/index.html'
