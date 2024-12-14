@@ -18,7 +18,7 @@ class UserListView(ListView):
 
 class UserCreateView(CreateView):
     form_class = UserCreateForm
-    template_name = 'users/user.create.html'
+    template_name = 'users/user_create.html'
     success_url = reverse_lazy('user_login')
 
     def form_valid(self, form):
@@ -58,8 +58,9 @@ class UserDeleteView(DeleteView):
         return super(). dispatch(request, *args, **kwargs)
     
     def delete(self, request, *args, **kwargs):
+        response = super().delete(request, *args, **kwargs)
         messages.success(request, 'Пользователь успешно удален')
-        return super().delete(request, * args, **kwargs)
+        return response
 
 
 class UserLoginView(FormView):
@@ -75,7 +76,7 @@ class UserLoginView(FormView):
             return redirect('index')
         else:
             messages.error(request, 'Неверные данные пользователя или пароль.')
-        return self.get(request, *args, **kwargs)
+        return self.render_to_response({'form': self.get_form()})
 
 
 class UserLogoutView(View):
