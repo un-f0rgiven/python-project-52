@@ -1,61 +1,55 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views import View
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from task_manager.labels.forms import LabelForm
 from task_manager.labels.models import Label
 
 
-@login_required
-def label_list(request):
-    labels = Label.objects.all()
-    return render(request, 'labels/label_list.html', {'labels': labels})
+class LabelListView(LoginRequiredMixin, ListView):
+    model = Label
+    template_name = 'labels/label_list.html'
+    context_object_name = 'labels'
 
 
-@login_required
-def label_create(request):
-    if request.method == 'POST':
-        form = LabelForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Метка успешно создана.')
-            return redirect('label_list')
-    else:
-        form = LabelForm()
-    return render(request, 'labels/label_create.html', {'form': form})
+class LabelCreateView(LoginRequiredMixin, CreateView):
+    form_class = LabelForm
+    template_name = 'labels/label_create.html'
+    success_url = '/labels/'
+    
+    def form_valid(self, form):
+        messages.success(self.request, 'Метка успешно создана.')
+        return super().form_valid(form)
 
 
-@login_required
-def label_update(request, pk):
-    label = get_object_or_404(Label, pk=pk)
-    if request.method == 'POST':
-        form = LabelForm(request.POST, instance=label)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Метка успешно изменена')
-            return redirect('label_list')
-    else:
-        form = LabelForm(instance=label)
-    return render(
-        request,
-        'labels/label_update.html',
-        {'form': form, 'label': label}
-    )
+class LabelUpdateView(LoginRequiredMixin, UpdateView):
+    model = Label
+    form_class = LabelForm
+    template_name = 'labels/label_update.html'
+    success_url = '/labels/'
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Метка успешно изменена')
+        return super().form_valid(form)
 
 
-@login_required
-def label_delete(request, pk):
-    label = get_object_or_404(Label, pk=pk)
+class LabelDeleteView(LoginRequiredMixin, DeleteView):
+    model = Label
+    template_name = 'labels/label_confirm_delete.html'
+    success_url = '/labels/'
 
-    if request.method == 'POST':
+    def dispatch(self, request, *args, **kwargs):
+        label = self.get_object()
         if label.tasks.exists():
             messages.error(
                 request,
                 'Невозможно удалить метку, т.к. она связана с задачей.'
             )
             return redirect('label_list')
+        return super().dispatch(request, *args, **kwargs)
 
-        label.delete()
+    def delete(self, request, *args, **kwargs):
         messages.success(request, 'Метка успешно удалена')
-        return redirect('label_list')
-    return render(request, 'labels/label_confirm_delete.html', {'label': label})
+        return super().delete(request, *args, **kwargs)

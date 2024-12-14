@@ -17,7 +17,7 @@ class StatusListView(LoginRequiredMixin, ListView):
 class StatusCreateView(LoginRequiredMixin, CreateView):
     form_class = StatusForm
     template_name = 'statuses/status_create.html'
-    success_url = '/statuses/'  # Замените на имя URL, если нужно
+    success_url = '/statuses/'
 
     def form_valid(self, form):
         messages.success(self.request, 'Статус успешно создан')
@@ -28,7 +28,7 @@ class StatusUpdateView(LoginRequiredMixin, UpdateView):
     model = Status
     form_class = StatusForm
     template_name = 'statuses/status_update.html'
-    success_url = '/statuses/'  # Замените на имя URL, если нужно
+    success_url = '/statuses/'
 
     def form_valid(self, form):
         messages.success(self.request, 'Статус успешно изменен')
@@ -38,7 +38,7 @@ class StatusUpdateView(LoginRequiredMixin, UpdateView):
 class StatusDeleteView(LoginRequiredMixin, DeleteView):
     model = Status
     template_name = 'statuses/status_confirm_delete.html'
-    success_url = '/statuses/'  # Замените на имя URL, если нужно
+    success_url = '/statuses/'
 
     def dispatch(self, request, *args, **kwargs):
         status = self.get_object()

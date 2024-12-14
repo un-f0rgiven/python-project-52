@@ -1,15 +1,15 @@
 from django.urls import path
 
 from task_manager.labels.views import (
-    label_create,
-    label_delete,
-    label_list,
-    label_update,
+    LabelCreateView,
+    LabelDeleteView,
+    LabelListView,
+    LabelUpdateView,
 )
 
 urlpatterns = [
-    path('', label_list, name='label_list'),
-    path('create/', label_create, name='label_create'),
-    path('<int:pk>/update/', label_update, name='label_update'),
-    path('<int:pk>/delete/', label_delete, name='label_delete'),
+    path('', LabelListView.as_view(), name='label_list'),
+    path('create/', LabelCreateView.as_view(), name='label_create'),
+    path('<int:pk>/update/', LabelUpdateView.as_view(), name='label_update'),
+    path('<int:pk>/delete/', LabelDeleteView.as_view(), name='label_delete'),
 ]
