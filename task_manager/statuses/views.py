@@ -1,59 +1,52 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views import View
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from task_manager.statuses.forms import StatusForm
 from task_manager.statuses.models import Status
 
 
-@login_required
-def status_list(request):
-    statuses = Status.objects.all()
-    return render(request, 'statuses/status_list.html', {'statuses': statuses})
+class StatusListView(LoginRequiredMixin, ListView):
+    model = Status
+    template_name = 'statuses/status_list.html'
+    context_object_name = 'statuses'
 
 
-@login_required
-def status_create(request):
-    if request.method == 'POST':
-        form = StatusForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Статус успешно создан')
-            return redirect('status_list')
-    else:
-        form = StatusForm()
-    return render(request, 'statuses/status_create.html', {'form': form})
+class StatusCreateView(LoginRequiredMixin, CreateView):
+    form_class = StatusForm
+    template_name = 'statuses/status_create.html'
+    success_url = '/statuses/'  # Замените на имя URL, если нужно
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Статус успешно создан')
+        return super().form_valid(form)
 
 
-@login_required
-def status_update(request, pk):
-    status = get_object_or_404(Status, pk=pk)
-    if request.method == 'POST':
-        form = StatusForm(request.POST, instance=status)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Статус успешно изменен')
-            return redirect('status_list')
-    else:
-        form = StatusForm(instance=status)
-    return render(request, 'statuses/status_update.html', {'form': form})
+class StatusUpdateView(LoginRequiredMixin, UpdateView):
+    model = Status
+    form_class = StatusForm
+    template_name = 'statuses/status_update.html'
+    success_url = '/statuses/'  # Замените на имя URL, если нужно
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Статус успешно изменен')
+        return super().form_valid(form)
 
 
-@login_required
-def status_delete(request, pk):
-    status = get_object_or_404(Status, pk=pk)
+class StatusDeleteView(LoginRequiredMixin, DeleteView):
+    model = Status
+    template_name = 'statuses/status_confirm_delete.html'
+    success_url = '/statuses/'  # Замените на имя URL, если нужно
 
-    if request.method == 'POST':
+    def dispatch(self, request, *args, **kwargs):
+        status = self.get_object()
         if status.tasks.exists():
             messages.error(request, 'Невозможно удалить статус')
             return redirect('status_list')
+        return super().dispatch(request, *args, **kwargs)
 
-        status.delete()
+    def delete(self, request, *args, **kwargs):
         messages.success(request, 'Статус успешно удален')
-        return redirect('status_list')
-
-    return render(
-        request,
-        'statuses/status_confirm_delete.html',
-        {'status': status}
-    )
+        return super().delete(request, *args, **kwargs)
