@@ -31,4 +31,8 @@ build-backend = "poetry.core.masonry.api"
 [tool.isort]
 profile = "black" 
 line_length = 80
-known_third_party = ["flask", "django"]
+known_third_party = ["django"]
+
+[tool.pytest]
+DJANGO_SETTINGS_MODULE = "task_manager.settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
