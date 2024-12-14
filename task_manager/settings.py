@@ -33,10 +33,12 @@ SECRET_KEY = os.getenv('SECRET_KEY', secrets.token_urlsafe(32))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
+RENDER_EXTERNAL_HOSTNAME = os.getenv('RENDER_EXTERNAL_HOSTNAME', 'localhost')
+
 ALLOWED_HOSTS = [
     'webserver',
     '127.0.0.1',
-    'task-manager-yoqv.onrender.com',
+    RENDER_EXTERNAL_HOSTNAME,
     'localhost'
 ]
 
