@@ -61,11 +61,11 @@ class LabelViewsTests(TestCase):
 
     def test_label_delete_view_with_tasks(self):
         # Создание статуса, который будет использоваться в задаче
-        from statuses.models import Status  # Импортируем модель статуса
+        from task_manager.statuses.models import Status  # Импортируем модель статуса
         status = Status.objects.create(name='New Status')
 
         # Создание задачи и связывание с меткой
-        from tasks.models import Task  # Импортируем модель задачи
+        from task_manager.tasks.models import Task  # Импортируем модель задачи
         task = Task.objects.create(
             title='Test Task', author=self.user, status=status
         )
