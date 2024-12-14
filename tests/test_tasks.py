@@ -9,20 +9,15 @@ from task_manager.tasks.models import Task
 
 
 class TaskViewsTests(TestCase):
+    fixtures = ['fixtures/initial_data.json']
 
     def setUp(self):
-        # Создание тестового пользователя
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass'
-        )
+        self.user = User.objects.get(username='testuser')
         self.client.login(username='testuser', password='testpass')
 
-        # Создание тестового статуса и метки
         self.status = Status.objects.create(name='New')
         self.label = Label.objects.create(name='Important')
 
-        # Создание тестовой задачи
         self.task = Task.objects.create(
             title='Test Task',
             author=self.user,
@@ -42,7 +37,7 @@ class TaskViewsTests(TestCase):
             'status': self.status.id,
             'labels': [self.label.id],
         })
-        self.assertEqual(response.status_code, 302)  # Проверка перенаправления
+        self.assertEqual(response.status_code, 302)
         self.assertTrue(Task.objects.filter(title='New Task').exists())
         messages_list = list(get_messages(response.wsgi_request))
         self.assertIn(
@@ -79,7 +74,6 @@ class TaskViewsTests(TestCase):
         )
 
     def test_task_delete_view_no_permission(self):
-        # Создаем другого пользователя и пытаемся удалить задачу
         User.objects.create_user(username='otheruser', password='otherpass')
         self.client.logout()
         self.client.login(username='otheruser', password='otherpass')

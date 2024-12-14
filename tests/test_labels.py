@@ -7,15 +7,12 @@ from task_manager.labels.models import Label
 
 
 class LabelViewsTests(TestCase):
+    fixtures = ['fixtures/initial_data.json']
 
     def setUp(self):
-        # Создание тестового пользователя
-        self.user = User.objects.create_user(
-            username='testuser', password='testpass'
-        )
+        self.user = User.objects.get(username='testuser')
         self.client.login(username='testuser', password='testpass')
 
-        # Создание тестовой метки
         self.label = Label.objects.create(name='Important')
 
     def test_label_list_view(self):
@@ -28,7 +25,7 @@ class LabelViewsTests(TestCase):
         response = self.client.post(reverse('label_create'), {
             'name': 'New Label'
         })
-        self.assertEqual(response.status_code, 302)  # Проверка перенаправления
+        self.assertEqual(response.status_code, 302)
         self.assertTrue(Label.objects.filter(name='New Label').exists())
         messages_list = list(get_messages(response.wsgi_request))
         self.assertIn(
@@ -60,12 +57,10 @@ class LabelViewsTests(TestCase):
         )
 
     def test_label_delete_view_with_tasks(self):
-        # Создание статуса, который будет использоваться в задаче
-        from task_manager.statuses.models import Status  # Импортируем модель статуса
+        from task_manager.statuses.models import Status
         status = Status.objects.create(name='New Status')
 
-        # Создание задачи и связывание с меткой
-        from task_manager.tasks.models import Task  # Импортируем модель задачи
+        from task_manager.tasks.models import Task
         task = Task.objects.create(
             title='Test Task', author=self.user, status=status
         )

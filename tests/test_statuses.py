@@ -7,16 +7,11 @@ from task_manager.statuses.models import Status
 
 
 class StatusViewsTests(TestCase):
+    fixtures = ['fixtures/initial_data.json']
 
     def setUp(self):
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass'
-        )
-        self.client.login(
-            username='testuser',
-            password='testpass'
-        )
+        self.user = User.objects.get(username='testuser')
+        self.client.login(username='testuser', password='testpass')
 
         self.status = Status.objects.create(name='New Status')
 
@@ -56,7 +51,8 @@ class StatusViewsTests(TestCase):
 
     def test_status_delete_view(self):
         response = self.client.post(
-            reverse('status_delete', args=[self.status.pk]))
+            reverse('status_delete', args=[self.status.pk])
+        )
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Status.objects.filter(pk=self.status.pk).exists())
         messages_list = list(get_messages(response.wsgi_request))

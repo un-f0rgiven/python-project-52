@@ -5,12 +5,11 @@ from django.urls import reverse
 
 
 class UserViewsTests(TestCase):
+    fixtures = ['fixtures/initial_data.json']
 
     def setUp(self):
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass'
-        )
+        self.user = User.objects.get(username='testuser')
+        self.another_user = User.objects.get(username='anothertestuser')
 
     def test_user_list_view(self):
         response = self.client.get(reverse('user_list'))
@@ -32,7 +31,7 @@ class UserViewsTests(TestCase):
             [m.message for m in messages_list]
         )
 
-    def test_user_update_view(self):
+    def test_user_update_view_as_owner(self):
         self.client.login(username='testuser', password='testpass')
         response = self.client.post(
             reverse('user_update', args=[self.user.pk]),
@@ -51,7 +50,25 @@ class UserViewsTests(TestCase):
             [m.message for m in messages_list]
         )
 
-    def test_user_delete_view(self):
+    def test_user_update_view_as_other_user(self):
+        self.client.login(username='testuser', password='testpass')
+        response = self.client.post(
+            reverse('user_update', args=[self.another_user.pk]),
+            {
+                'username': 'malicious_update',
+                'password': 'testpass',
+                'password2': 'testpass'
+            }
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertNotEqual(self.another_user.username, 'malicious_update')
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertIn(
+            'У вас недостаточно прав для изменения другого пользователя.',
+            [m.message for m in messages_list]
+        )
+
+    def test_user_delete_view_as_owner(self):
         self.client.login(username='testuser', password='testpass')
         response = self.client.post(reverse('user_delete', args=[self.user.pk]))
         self.assertEqual(response.status_code, 302)
@@ -59,6 +76,17 @@ class UserViewsTests(TestCase):
         messages_list = list(get_messages(response.wsgi_request))
         self.assertIn(
             'Пользователь успешно удален',
+            [m.message for m in messages_list]
+        )
+
+    def test_user_delete_view_as_other_user(self):
+        self.client.login(username='testuser', password='testpass')
+        response = self.client.post(reverse('user_delete', args=[self.another_user.pk]))
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(User.objects.filter(username='anothertestuser').exists())
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertIn(
+            'У вас нет прав для изменения',
             [m.message for m in messages_list]
         )
 

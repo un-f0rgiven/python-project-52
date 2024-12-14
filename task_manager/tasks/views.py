@@ -39,7 +39,7 @@ class TaskListView(LoginRequiredMixin, ListView):
 class TaskCreateView(LoginRequiredMixin, CreateView):
     form_class = TaskForm
     template_name = 'tasks/task_create.html'
-    success_url = '/tasks/'  # Замените на имя URL, если нужно
+    success_url = '/tasks/'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -74,7 +74,7 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
 class TaskDeleteView(LoginRequiredMixin, DeleteView):
     model = Task
     template_name = 'tasks/task_confirm_delete.html'
-    success_url = '/tasks/'  # Замените на имя URL, если нужно
+    success_url = '/tasks/'
 
     def dispatch(self, request, *args, **kwargs):
         task = self.get_object()
