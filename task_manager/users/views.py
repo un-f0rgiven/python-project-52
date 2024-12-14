@@ -1,8 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404, redirect, render
-from django.vews.generic import ListView, CreateView, UpdateView, DeleteView, FormView
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse_lazy
 
 from task_manager.users.decorators import login_required
