@@ -2,80 +2,69 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
+from django.vews.generic import ListView, CreateView, UpdateView, DeleteView, FormView
+from django.urls import reverse_lazy
 
 from task_manager.users.decorators import login_required
 from task_manager.users.forms import UserCreateForm, UserUpdateForm
 
 
-def user_list(request):
-    users = User.objects.all()
-    return render(request, 'users/user_list.html', {'users': users})
+class UserListView(ListView):
+    model = User
+    template_name = 'users/user_list.html'
+    context_object_name = 'users'
 
 
-def user_create(request):
-    if request.method == 'POST':
-        form = UserCreateForm(request.POST)
+class UserCreateView(CreateView):
+    form_class = UserCreateForm
+    template_name = 'users/user.create.html'
+    success_url = reverse_lazy('user_login')
 
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Пользователь успешно зарегистрирован.')
-            return redirect('user_login')
-        else:
-            pass
-    else:
-        form = UserCreateForm()
-
-    return render(request, 'users/user_create.html', {'form': form})
+    def form_valid(self, form):
+        messages.success(self.request, 'Пользователь успешно зарегистрирован.')
+        return super().form_valid(form)
 
 
-@login_required
-def user_update(request, pk):
-    user = get_object_or_404(User, pk=pk)
-    if request.user != user:
-        messages.error(
-            request,
-            "У вас нет прав для изменения другого пользователя."
-        )
-        return redirect('user_list')
+class UserUpdateView(UpdateView):
+    model = User
+    form_class = UserUpdateForm
+    template_name = 'users/user_update.html'
+    context_object_name = 'user'
+    success_url = reverse_lazy('user_list')
 
-    if request.method == 'POST':
-        form = UserUpdateForm(request.POST, instance=user)
-        password1 = request.POST.get('password1')
-        print(f'password1: {password1}')
-        password2 = request.POST.get('password2')
-        print(f'password2: {password2}')
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Пользователь успешно изменен')
+    def dispatch(self, request, *args, **kwargs):
+        user = self.get_object()
+        if request.user != user:
+            messages.error(request, 'У вас недостаточно прав для изменения другого пользователя.')
             return redirect('user_list')
-    else:
-        form = UserUpdateForm(instance=user)
+        return super().dispatch(request, *args, **kwargs)
+    
+    def form_valid(self, form):
+        messages.success(self.request, 'Пользователь успешно изменен')
+        return super().form_valid(form)
 
-    return render(
-        request,
-        'users/user_update.html',
-        {'form': form, 'user': user}
-    )
+class UserDeleteView(DeleteView):
+    model = User
+    template_name = 'users/user_delete.html'
+    context_object_name = 'user'
+    success_url = reverse_lazy('user_list')
 
-
-@login_required
-def user_delete(request, pk):
-    user = get_object_or_404(User, pk=pk)
-
-    if request.user != user:
-        messages.error(request, "У вас нет прав для изменения")
-        return redirect('user_list')
-
-    if request.method == 'POST':
-        user.delete()
+    def dispatch(self, request, *args, **kwargs):
+        user = self.get_object()
+        if request.user != user:
+            messages.error(request, 'У вас нет прав для изменения')
+            return redirect('user_list')
+        return super(). dispatch(request, *args, **kwargs)
+    
+    def delete(self, request, *args, **kwargs):
         messages.success(request, 'Пользователь успешно удален')
-        return redirect('user_list')
-
-    return render(request, 'users/user_delete.html', {'user': user})
+        return super().delete(request, * args, **kwargs)
 
 
-def user_login(request):
-    if request.method == 'POST':
+class UserLoginView(FormView):
+    template_name = 'users/user_login.html'
+
+    def post(self, request, *args, **kwargs):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
@@ -85,10 +74,11 @@ def user_login(request):
             return redirect('index')
         else:
             messages.error(request, 'Неверные данные пользователя или пароль.')
-    return render(request, 'users/user_login.html')
+        return self.get(request, *args, **kwargs)
 
 
-def user_logout(request):
-    logout(request)
-    messages.info(request, 'Вы разлогинены')
-    return redirect('index')
+class UserLogoutView(View):
+    def get(self, request):
+        logout(request)
+        messages.info(request, 'Вы разлогинены')
+        return redirect('index')
