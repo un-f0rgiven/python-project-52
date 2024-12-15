@@ -1,12 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse_lazy
 
-from task_manager.users.decorators import login_required
 from task_manager.users.forms import UserCreateForm, UserUpdateForm
 
 
@@ -65,22 +65,20 @@ class UserDeleteView(DeleteView):
 
 class UserLoginView(FormView):
     template_name = 'users/user_login.html'
+    form_class = AuthenticationForm
 
-    def post(self, request, *args, **kwargs):
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            messages.success(request, 'Вы залогинены')
-            return redirect('index')
-        else:
-            messages.error(request, 'Неверные данные пользователя или пароль.')
-        return self.render_to_response({'form': self.get_form()})
+    def form_valid(self, form):
+        login(self.request, form.get_user())
+        messages.success(self.request, 'Вы залогинены')
+        return redirect('index')
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Неверные данные пользователя или пароль.')
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class UserLogoutView(View):
-    def get(self, request):
+    def post(self, request):
         logout(request)
         messages.info(request, 'Вы разлогинены')
         return redirect('index')
