@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.contrib.messages import get_messages
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
 
 from task_manager.labels.models import Label
@@ -12,8 +12,9 @@ class TaskViewsTests(TestCase):
     fixtures = ['fixtures/initial_data.json']
 
     def setUp(self):
-        self.user = User.objects.get(username='testuser')
-        self.client.login(username='testuser', password='testpass')
+        self.client = Client()
+        self.user = User.objects.get(username='test_user')
+        self.client.login(username='test_user', password='testpass')
 
         self.status = Status.objects.create(name='New')
         self.label = Label.objects.create(name='Important')
@@ -74,9 +75,10 @@ class TaskViewsTests(TestCase):
         )
 
     def test_task_delete_view_no_permission(self):
-        User.objects.create_user(username='otheruser', password='otherpass')
+        another_user = User.objects.create_user(username='otheruser', password='otherpass')
         self.client.logout()
         self.client.login(username='otheruser', password='otherpass')
+
         response = self.client.post(reverse('task_delete', args=[self.task.pk]))
         self.assertEqual(response.status_code, 302)
         self.assertTrue(Task.objects.filter(pk=self.task.pk).exists())

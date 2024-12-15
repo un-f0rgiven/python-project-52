@@ -1,11 +1,12 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from task_manager.users.forms import UserCreateForm, UserUpdateForm
 
@@ -36,7 +37,7 @@ class UserUpdateView(UpdateView):
     def dispatch(self, request, *args, **kwargs):
         user = self.get_object()
         if request.user != user:
-            messages.error(request, 'У вас недостаточно прав для изменения другого пользователя.')
+            messages.error(request, 'У вас нет прав для изменения другого пользователя.')
             return redirect('user_list')
         return super().dispatch(request, *args, **kwargs)
     
@@ -44,23 +45,28 @@ class UserUpdateView(UpdateView):
         messages.success(self.request, 'Пользователь успешно изменен')
         return super().form_valid(form)
 
-class UserDeleteView(DeleteView):
+
+class UserDeleteView(LoginRequiredMixin, DeleteView):
     model = User
     template_name = 'users/user_confirm_delete.html'
     context_object_name = 'user'
     success_url = reverse_lazy('user_list')
 
     def dispatch(self, request, *args, **kwargs):
+        print('Вызывается Method dispatch')
         user = self.get_object()
+        
         if request.user != user:
-            messages.error(request, 'У вас нет прав для изменения')
+            messages.error(request, 'Вы не можете удалить другого пользователя.')
             return redirect('user_list')
-        return super(). dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
-    def delete(self, request, *args, **kwargs):
-        response = super().delete(request, *args, **kwargs)
-        messages.success(request, 'Пользователь успешно удален')
-        return response
+    def post(self, request, *args, **kwargs):
+        print('Вызывается Method POST')
+        user = self.get_object()
+        user.delete()
+        messages.success(request, 'Ваш аккаунт успешно удален.')
+        return redirect('user_list')
 
 
 class UserLoginView(FormView):

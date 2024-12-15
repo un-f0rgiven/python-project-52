@@ -58,6 +58,7 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
     model = Task
     form_class = TaskForm
     template_name = 'tasks/task_update.html'
+    success_url = '/tasks/'
 
     def form_valid(self, form):
         messages.success(self.request, 'Задача успешно изменена.')
@@ -83,7 +84,7 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
             return redirect('task_list')
         return super().dispatch(request, *args, **kwargs)
 
-    def delete(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         messages.success(request, 'Задача успешно удалена.')
         return super().delete(request, *args, **kwargs)
 

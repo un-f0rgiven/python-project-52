@@ -1,18 +1,19 @@
 from django.contrib.auth.models import User
 from django.contrib.messages import get_messages
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
 
 from task_manager.statuses.models import Status
-
 
 class StatusViewsTests(TestCase):
     fixtures = ['fixtures/initial_data.json']
 
     def setUp(self):
-        self.user = User.objects.get(username='testuser')
-        self.client.login(username='testuser', password='testpass')
+        self.client = Client()
+        self.user = User.objects.get(username='test_user')
+        self.client.login(username='test_user', password='testpass')
 
+        # Создаем статус для тестов
         self.status = Status.objects.create(name='New Status')
 
     def test_status_list_view(self):

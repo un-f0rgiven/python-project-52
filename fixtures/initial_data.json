@@ -3,7 +3,7 @@
         "model": "auth.user",
         "pk": 1,
         "fields": {
-            "username": "testuser",
+            "username": "test_user",
             "password": "pbkdf2_sha256$870000$bgAfNBP3fmYuACcCr8ijb6$JFsSoBFJyCr+MredmYUpeVnNc/QKcxJ4rLP0/rziY/Q=",
             "first_name": "test_first_name",
             "last_name": "test_last_name",
@@ -17,7 +17,7 @@
         "model": "auth.user",
         "pk": 2,
         "fields": {
-            "username": "anothertestuser",
+            "username": "another_test_user",
             "password": "pbkdf2_sha256$870000$bgAfNBP3fmYuACcCr8ijb6$JFsSoBFJyCr+MredmYUpeVnNc/QKcxJ4rLP0/rziY/Q=",
             "first_name": "another_first_name",
             "last_name": "another_last_name",

@@ -47,6 +47,6 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
             return redirect('status_list')
         return super().dispatch(request, *args, **kwargs)
 
-    def delete(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         messages.success(request, 'Статус успешно удален')
         return super().delete(request, *args, **kwargs)

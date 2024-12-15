@@ -50,6 +50,6 @@ class LabelDeleteView(LoginRequiredMixin, DeleteView):
             return redirect('label_list')
         return super().dispatch(request, *args, **kwargs)
 
-    def delete(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         messages.success(request, 'Метка успешно удалена')
         return super().delete(request, *args, **kwargs)
