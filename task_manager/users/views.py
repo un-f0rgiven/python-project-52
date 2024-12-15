@@ -46,7 +46,7 @@ class UserUpdateView(UpdateView):
 
 class UserDeleteView(DeleteView):
     model = User
-    template_name = 'users/user_delete.html'
+    template_name = 'users/user_confirm_delete.html'
     context_object_name = 'user'
     success_url = reverse_lazy('user_list')
 
@@ -56,7 +56,7 @@ class UserDeleteView(DeleteView):
             messages.error(request, 'У вас нет прав для изменения')
             return redirect('user_list')
         return super(). dispatch(request, *args, **kwargs)
-    
+
     def delete(self, request, *args, **kwargs):
         response = super().delete(request, *args, **kwargs)
         messages.success(request, 'Пользователь успешно удален')
@@ -66,6 +66,10 @@ class UserDeleteView(DeleteView):
 class UserLoginView(FormView):
     template_name = 'users/user_login.html'
     form_class = AuthenticationForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.get_form()
+        return self.render_to_response(self.get_context_data(form=form))
 
     def form_valid(self, form):
         login(self.request, form.get_user())

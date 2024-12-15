@@ -17,14 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from task_manager.users.views import UserLoginView
 from task_manager.views import IndexView, FaviconView
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('favicon.ico', FaviconView.as_view(), name='favicon'),
     path('users/', include('task_manager.users.urls')),
-    path('login/', UserLoginView.as_view(), name='user_login'),
     path('statuses/', include('task_manager.statuses.urls')),
     path('tasks/', include('task_manager.tasks.urls')),
     path('labels/', include('task_manager.labels.urls')),
