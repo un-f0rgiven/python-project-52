@@ -67,7 +67,7 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
         print('Вызывается Method POST')
         user = self.get_object()
         user.delete()
-        messages.success(request, 'Ваш аккаунт успешно удален.')
+        messages.success(request, 'Пользователь успешно удален')
         return redirect('user_list')
 
 
