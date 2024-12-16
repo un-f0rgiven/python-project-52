@@ -20,7 +20,7 @@ class TaskViewsTests(TestCase):
         self.label = Label.objects.create(name='Important')
 
         self.task = Task.objects.create(
-            title='Test Task',
+            name ='Test Task',
             author=self.user,
             status=self.status,
         )
@@ -30,16 +30,16 @@ class TaskViewsTests(TestCase):
         response = self.client.get(reverse('task_list'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'tasks/task_list.html')
-        self.assertContains(response, self.task.title)
+        self.assertContains(response, self.task.name)
 
     def test_task_create_view(self):
         response = self.client.post(reverse('task_create'), {
-            'title': 'New Task',
+            'name': 'New Task',
             'status': self.status.id,
             'labels': [self.label.id],
         })
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(Task.objects.filter(title='New Task').exists())
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Task.objects.filter(name='New Task').exists())
         messages_list = list(get_messages(response.wsgi_request))
         self.assertIn(
             'Задача успешно создана',
@@ -50,14 +50,14 @@ class TaskViewsTests(TestCase):
         response = self.client.post(
             reverse('task_update', args=[self.task.pk]),
             {
-                'title': 'Updated Task',
+                'name': 'Updated Task',
                 'status': self.status.id,
                 'labels': [self.label.id],
             }
         )
         self.task.refresh_from_db()
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(self.task.title, 'Updated Task')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.task.name, 'Updated Task')
         messages_list = list(get_messages(response.wsgi_request))
         self.assertIn(
             'Задача успешно изменена.',

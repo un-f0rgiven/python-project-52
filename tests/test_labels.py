@@ -62,7 +62,7 @@ class LabelViewsTests(TestCase):
     def test_label_delete_view_with_tasks(self):
         status = Status.objects.create(name='New Status')
         task = Task.objects.create(
-            title='Test Task', author=self.user, status=status
+            name='Test Task', author=self.user, status=status
         )
         task.labels.add(self.label)
 
