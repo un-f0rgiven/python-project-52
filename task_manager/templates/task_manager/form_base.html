@@ -1,0 +1,7 @@
+{% load django_bootstrap5 %}
+
+<form method="post" novalidate>
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <input class="btn btn-primary" type="submit" value="{{ submit_text }}">
+</form>
