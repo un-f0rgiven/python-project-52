@@ -1,63 +1,9 @@
 {% extends 'task_manager/base.html' %}
+{% load django_bootstrap5 %}
 
-{% block title %}Менеджер задач Hexlet{% endblock %}
+{% block title %}Изменение задачи{% endblock %}
 
 {% block content %}
-
 <h1 class="my-4">Изменение задачи</h1>
-
-<form method="post">
-    {% csrf_token %}
-    
-    <div class="mb-3">
-        <label class="form-label" for="id_name">Имя</label>
-        <input type="text" name="title" maxlength="150" class="form-control{% if form.name.errors %} is-invalid{% endif %}" placeholder="Имя" required id="id_name" value="{{ form.title.value }}">
-        {% for error in form.name.errors %}
-            <div class="invalid-feedback">{{ error }}</div>
-        {% endfor %}
-    </div>
-    
-    <div class="mb-3">
-        <label class="form-label" for="{{ form.description.id_for_label }}">Описание</label>
-        <textarea name="description" cols="40" rows="10" class="form-control{% if form.description.errors %} is-invalid{% endif %}" placeholder="Описание" required id="{{ form.description.id_for_label }}">{{ form.description.value }}</textarea>
-        {% for error in form.description.errors %}
-            <div class="invalid-feedback">{{ error }}</div>
-        {% endfor %}
-    </div>
-    
-    <div class="mb-3">
-        <label class="form-label" for="{{ form.status.id_for_label }}">Статус</label>
-        <select name="status" class="form-select{% if form.status.errors %} is-invalid{% endif %}" required id="{{ form.status.id_for_label }}">
-            <option value="" selected>---------</option>
-            {% for status in statuses %}
-                <option value="{{ status.id }}" {% if status.id == form.status.value %}selected{% endif %}>{{ status.name }}</option>
-            {% endfor %}
-        </select>
-        {% for error in form.status.errors %}
-            <div class="invalid-feedback">{{ error }}</div>
-        {% endfor %}
-    </div>
-    
-    <div class="mb-3">
-        <label class="form-label" for="{{ form.executor.id_for_label }}">Исполнитель</label>
-        <select name="executor" class="form-select" id="{{ form.executor.id_for_label }}">
-            <option value="" selected>---------</option>
-            {% for executor in executors %}
-                <option value="{{ executor.id }}" {% if executor.id == form.executor.value %}selected{% endif %}>{{ executor.first_name }} {{ executor.last_name }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    
-    <div class="mb-3">
-        <label class="form-label" for="id_labels">Метки</label>
-        <select name="labels" class="form-select" id="id_labels" multiple>
-            {% for label in labels %}
-                <option value="{{ label.id }}" {% if label.id in form.labels.value %}selected{% endif %}>{{ label.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    
-    <input class="btn btn-primary" type="submit" value="Изменить">
-</form>
-
+{% include 'task_manager/form_base.html' with submit_text="Изменить" %}
 {% endblock %}

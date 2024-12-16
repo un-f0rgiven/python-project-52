@@ -7,7 +7,7 @@ from task_manager.statuses.models import Status
 
 class Task(models.Model):
 
-    title = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     status = models.ForeignKey(
         Status,
@@ -31,4 +31,4 @@ class Task(models.Model):
     )
 
     def __str__(self):
-        return self.title
+        return self.name
