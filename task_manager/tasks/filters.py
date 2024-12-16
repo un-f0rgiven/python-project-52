@@ -15,3 +15,12 @@ class TaskFilter(django_filters.FilterSet):
     class Meta:
         model = Task
         fields = ['status', 'executor', 'labels']
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(TaskFilter, self).__init__(*args, **kwargs)
+
+    def filter_queryset(self, queryset):
+        if self.data.get('self_tasks') == 'on':
+            queryset = queryset.filter(author=self.user)
+        return super().filter_queryset(queryset)

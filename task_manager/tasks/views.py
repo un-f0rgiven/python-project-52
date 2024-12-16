@@ -20,16 +20,13 @@ class TaskListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         tasks = Task.objects.all()
-        task_filter = TaskFilter(self.request.GET, queryset=tasks)
-
-        if self.request.GET.get('self_tasks'):
-            tasks = tasks.filter(author=self.request.user)
-
+        task_filter = TaskFilter(self.request.GET, queryset=tasks, user=self.request.user)
         return task_filter.qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['filter'] = TaskFilter(self.request.GET, queryset=self.get_queryset())
+        tasks = self.get_queryset()
+        context['filter'] = TaskFilter(self.request.GET, queryset=tasks, user=self.request.user)
         context['statuses'] = Status.objects.all()
         context['labels'] = Label.objects.all()
         context['executors'] = User.objects.all()

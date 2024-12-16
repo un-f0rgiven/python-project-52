@@ -12,7 +12,6 @@
     <div class="card mb-3">
         <div class="card-body bg-light">
             <form method="get">
-                {% csrf_token %}
                 {% bootstrap_form filter.form %}
                 <div class="mb-3">
                     <input class="btn btn-primary" type="submit" value="Показать">
