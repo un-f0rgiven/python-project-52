@@ -11,7 +11,7 @@ class TaskForm(forms.ModelForm):
     description = forms.CharField(max_length=250, required=True, label='Описание', widget=forms.Textarea(attrs={'rows': 4, 'style': 'resize: vertical;'}))
     status = forms.ModelChoiceField(queryset=Status.objects.all(), required=True, label='Статус', empty_label="---------")
     executor = forms.ModelChoiceField(queryset=User.objects.all(), required=True, label='Исполнитель', empty_label="---------")
-    labels = forms.ModelMultipleChoiceField(queryset=Label.objects.all(), required=True, label='Метки', widget=forms.SelectMultiple())
+    labels = forms.ModelMultipleChoiceField(queryset=Label.objects.all(), required=False, label='Метки', widget=forms.SelectMultiple())
 
 
     class Meta:
