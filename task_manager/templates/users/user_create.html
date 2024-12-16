@@ -1,51 +1,9 @@
 {% extends 'task_manager/base.html' %}
+{% load django_bootstrap5 %}
 
-{% block title %}Менеджер задач Hexlet{% endblock %}
+{% block title %}Регистрация{% endblock %}
 
 {% block content %}
-
 <h1 class="my-4">Регистрация</h1>
-<form method="post">
-    {% csrf_token %}
-    <div class="mb-3">
-        <label class="form-label" for="{{ form.first_name.id_for_label }}">Имя</label>
-        <input type="text" name="first_name" maxlength="150" class="form-control{% if form.first_name.errors %} is-invalid{% endif %}" placeholder="Имя" required id="{{ form.first_name.id_for_label }}">
-        {% for error in form.first_name.errors %}
-            <div class="invalid-feedback">{{ error }}</div>
-        {% endfor %}
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="{{ form.last_name.id_for_label }}">Фамилия</label>
-        <input type="text" name="last_name" maxlength="150" class="form-control{% if form.last_name.errors %} is-invalid{% endif %}" placeholder="Фамилия" required id="{{ form.last_name.id_for_label }}">
-        {% for error in form.last_name.errors %}
-            <div class="invalid-feedback">{{ error }}</div>
-        {% endfor %}
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="{{ form.username.id_for_label }}">Имя пользователя</label>
-        <input type="text" name="username" maxlength="150" autofocus class="form-control{% if form.username.errors %} is-invalid{% endif %}" placeholder="Имя пользователя" required id="{{ form.username.id_for_label }}">
-        {% for error in form.username.errors %}
-            <div class="invalid-feedback">{{ error }}</div>
-        {% endfor %}
-        <div class="form-text">Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./+/-/_.</div>
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="{{ form.password1.id_for_label }}">Пароль</label>
-        <input type="password" name="password1" autocomplete="new-password" class="form-control{% if form.password1.errors %} is-invalid{% endif %}" placeholder="Пароль" required id="{{ form.password1.id_for_label }}">
-        {% for error in form.password1.errors %}
-            <div class="invalid-feedback">{{ error }}</div>
-        {% endfor %}
-        <div class="form-text"><ul><li>Ваш пароль должен содержать как минимум 3 символа.</li></ul></div>
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="{{ form.password2.id_for_label }}">Подтверждение пароля</label>
-        <input type="password" name="password2" autocomplete="new-password" class="form-control{% if form.password2.errors %} is-invalid{% endif %}" placeholder="Подтверждение пароля" required id="{{ form.password2.id_for_label }}">
-        {% for error in form.password2.errors %}
-            <div class="invalid-feedback">{{ error }}</div>
-        {% endfor %}
-        <div class="form-text">Для подтверждения введите, пожалуйста, пароль ещё раз.</div>
-    </div>
-    <input class="btn btn-primary" type="submit" value="Зарегистрировать">
-</form>
-
+{% include 'task_manager/form_base.html' with submit_text="Зарегистрировать" %}
 {% endblock %}

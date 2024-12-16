@@ -1,19 +1,9 @@
 {% extends 'task_manager/base.html' %}
+{% load django_bootstrap5 %}
 
-{% block title %}Менеджер задач Hexlet{% endblock %}
+{% block title %}Вход{% endblock %}
 
 {% block content %}
-
 <h1 class="my-4">Вход</h1>
-
-<form method="post">
-  {% csrf_token %}
-  <div class="mb-3">
-    <label class="form-label" for="id_username">Имя пользователя</label>
-    <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" class="form-control" placeholder="Имя пользователя" required id="id_username"></div>
-  <div class="mb-3">
-    <label class="form-label" for="id_password">Пароль</label>
-    <input type="password" name="password" autocomplete="off" class="form-control" placeholder="Пароль" required id="id_password"></div>
-    <input class="btn btn-primary" type="submit" value="Войти">
-</form>
+{% include 'task_manager/form_base.html' with submit_text="Войти" %}
 {% endblock %}

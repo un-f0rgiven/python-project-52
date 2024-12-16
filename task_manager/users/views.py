@@ -8,7 +8,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, F
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from task_manager.users.forms import UserCreateForm, UserUpdateForm
+from task_manager.users.forms import UserCreateForm, UserUpdateForm, UserLoginForm
 
 
 class UserListView(ListView):
@@ -23,6 +23,8 @@ class UserCreateView(CreateView):
     success_url = reverse_lazy('user_login')
 
     def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
         messages.success(self.request, 'Пользователь успешно зарегистрирован.')
         return super().form_valid(form)
 
@@ -71,7 +73,8 @@ class UserDeleteView(LoginRequiredMixin, DeleteView):
 
 class UserLoginView(FormView):
     template_name = 'users/user_login.html'
-    form_class = AuthenticationForm
+    form_class = UserLoginForm
+    success_url = reverse_lazy('user_list')
 
     def get(self, request, *args, **kwargs):
         form = self.get_form()

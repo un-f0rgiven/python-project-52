@@ -1,46 +1,9 @@
 {% extends 'task_manager/base.html' %}
+{% load django_bootstrap5 %}
 
-{% block title %}Менеджер задач Hexlet{% endblock %}
+{% block title %}Изменение пользователя{% endblock %}
 
 {% block content %}
-
 <h1 class="my-4">Изменение пользователя</h1>
-
-<form method="post">
-  {% csrf_token %}
-  
-  <div class="mb-3">
-      <label class="form-label" for="id_first_name">Имя</label>
-      <input type="text" name="first_name" maxlength="150" class="form-control" placeholder="Имя" required id="id_first_name" value="{{ form.first_name.value|default:user.first_name }}">
-  </div>
-  
-  <div class="mb-3">
-      <label class="form-label" for="id_last_name">Фамилия</label>
-      <input type="text" name="last_name" maxlength="150" class="form-control" placeholder="Фамилия" required id="id_last_name" value="{{ form.last_name.value|default:user.last_name }}">
-  </div>
-  
-  <div class="mb-3">
-      <label class="form-label" for="id_username">Имя пользователя</label>
-      <input type="text" name="username" maxlength="150" autofocus class="form-control {% if form.username.errors %}is-invalid{% endif %}" placeholder="Имя пользователя" required aria-describedby="id_username_helptext" id="id_username" value="{{ form.username.value|default:user.username }}">
-      {% for error in form.username.errors %}
-        <div class="invalid-feedback">{{ error }}</div>
-      {% endfor %}
-      <div class="form-text">Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./+/-/_.</div>
-
-  </div>
-
-  <div class="mb-3">
-      <label class="form-label" for="id_password1">Пароль</label>
-      <input type="password" name="password1" autocomplete="off" class="form-control" placeholder="Введите ваш пароль для подтверждения" required id="id_password1">
-  </div>
-  
-  <div class="mb-3">
-      <label class="form-label" for="id_password2">Подтверждение пароля</label>
-      <input type="password" name="password2" autocomplete="off" class="form-control" placeholder="Подтверждение пароля" required id="id_password2">
-      <div class="form-text">Для подтверждения введите, пожалуйста, ваш пароль ещё раз.</div>
-  </div>
-  
-  <input class="btn btn-primary" type="submit" value="Изменить">
-</form>
-
+{% include 'task_manager/form_base.html' with submit_text="Изменить" %}
 {% endblock %}
