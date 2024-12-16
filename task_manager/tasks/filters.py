@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 class TaskFilter(django_filters.FilterSet):
     status = django_filters.ModelChoiceFilter(label='Статус', queryset=Status.objects.all())
     executor = django_filters.ModelChoiceFilter(label='Исполнитель', queryset=User.objects.all())
-    labels = django_filters.ModelChoiceFilter(label='Метки', queryset=Label.objects.all())
+    labels = django_filters.ModelChoiceFilter(label='Метка', queryset=Label.objects.all())
 
     class Meta:
         model = Task
