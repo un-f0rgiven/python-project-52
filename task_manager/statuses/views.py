@@ -41,12 +41,16 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
     success_url = '/statuses/'
 
     def dispatch(self, request, *args, **kwargs):
-        status = self.get_object()
-        if status.tasks.exists():
+        self.object = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        if self.object.tasks.exists():
             messages.error(request, 'Невозможно удалить статус')
             return redirect('status_list')
-        return super().dispatch(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
         messages.success(request, 'Статус успешно удален')
         return super().delete(request, *args, **kwargs)
+
+
+
