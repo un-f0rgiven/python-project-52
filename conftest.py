@@ -1,11 +1,12 @@
 import os
+
+import django
 import pytest
 from django.conf import settings
-import django
-
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'task_manager.settings'
 django.setup()
+
 
 @pytest.fixture(scope='session')
 def django_db_setup():

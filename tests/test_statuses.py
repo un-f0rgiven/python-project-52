@@ -1,9 +1,10 @@
-from task_manager.users.models import User
 from django.contrib.messages import get_messages
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.urls import reverse
 
 from task_manager.statuses.models import Status
+from task_manager.users.models import User
+
 
 class StatusViewsTests(TestCase):
     fixtures = ['fixtures/initial_data.json']

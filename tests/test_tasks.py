@@ -1,11 +1,11 @@
-from task_manager.users.models import User
 from django.contrib.messages import get_messages
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.urls import reverse
 
 from task_manager.labels.models import Label
 from task_manager.statuses.models import Status
 from task_manager.tasks.models import Task
+from task_manager.users.models import User
 
 
 class TaskViewsTests(TestCase):
@@ -20,7 +20,7 @@ class TaskViewsTests(TestCase):
         self.label = Label.objects.create(name='Important')
 
         self.task = Task.objects.create(
-            name ='Test Task',
+            name='Test Task',
             author=self.user,
             status=self.status,
         )
@@ -33,12 +33,15 @@ class TaskViewsTests(TestCase):
         self.assertContains(response, self.task.name)
 
     def test_task_create_view(self):
+        self.client.login(username='test_user', password='testpass')
         response = self.client.post(reverse('task_create'), {
             'name': 'New Task',
+            'description': 'test description',
             'status': self.status.id,
+            'executor': self.user.id,
             'labels': [self.label.id],
         })
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         self.assertTrue(Task.objects.filter(name='New Task').exists())
         messages_list = list(get_messages(response.wsgi_request))
         self.assertIn(
@@ -51,12 +54,14 @@ class TaskViewsTests(TestCase):
             reverse('task_update', args=[self.task.pk]),
             {
                 'name': 'Updated Task',
+                'description': 'test description',
                 'status': self.status.id,
+                'executor': self.user.id,
                 'labels': [self.label.id],
             }
         )
         self.task.refresh_from_db()
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
         self.assertEqual(self.task.name, 'Updated Task')
         messages_list = list(get_messages(response.wsgi_request))
         self.assertIn(

@@ -1,8 +1,10 @@
-from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from task_manager.users.models import User
-from django.core.exceptions import ValidationError
 import re
+
+from django import forms
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.core.exceptions import ValidationError
+
+from task_manager.users.models import User
 
 
 class UserCreateForm(UserCreationForm):

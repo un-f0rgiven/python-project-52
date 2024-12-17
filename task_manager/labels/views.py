@@ -1,8 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, redirect, render
-from django.views import View
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.shortcuts import redirect
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from task_manager.labels.forms import LabelForm
 from task_manager.labels.models import Label

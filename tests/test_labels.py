@@ -1,11 +1,12 @@
-from task_manager.users.models import User
 from django.contrib.messages import get_messages
-from django.test import TestCase, Client
+from django.test import Client, TestCase
 from django.urls import reverse
 
 from task_manager.labels.models import Label
 from task_manager.statuses.models import Status
 from task_manager.tasks.models import Task
+from task_manager.users.models import User
+
 
 class LabelViewsTests(TestCase):
     fixtures = ['fixtures/initial_data.json']
@@ -15,7 +16,6 @@ class LabelViewsTests(TestCase):
         self.user = User.objects.get(username='test_user')
         self.client.login(username='test_user', password='testpass')
 
-        # Создаем метку для тестов
         self.label = Label.objects.create(name='Important')
 
     def test_label_list_view(self):
@@ -73,6 +73,6 @@ class LabelViewsTests(TestCase):
         self.assertTrue(Label.objects.filter(pk=self.label.pk).exists())
         messages_list = list(get_messages(response.wsgi_request))
         self.assertIn(
-            'Невозможно удалить метку, т.к. она связана с задачей.',
+            'Невозможно удалить метку',
             [m.message for m in messages_list]
         )

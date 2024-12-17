@@ -1,14 +1,23 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from task_manager.users.models import User
-from django.contrib.auth.forms import AuthenticationForm
-from django.shortcuts import redirect
-from django.views import View
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
-from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.views import View
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    FormView,
+    ListView,
+    UpdateView,
+)
 
-from task_manager.users.forms import UserCreateForm, UserUpdateForm, UserLoginForm
+from task_manager.users.forms import (
+    UserCreateForm,
+    UserLoginForm,
+    UserUpdateForm,
+)
+from task_manager.users.models import User
 
 
 class UserListView(ListView):

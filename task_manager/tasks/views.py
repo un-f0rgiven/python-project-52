@@ -1,16 +1,20 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from task_manager.users.models import User
-from django.shortcuts import get_object_or_404, redirect, render
-from django.views import View
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.shortcuts import redirect
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
 from task_manager.labels.models import Label
 from task_manager.statuses.models import Status
 from task_manager.tasks.filters import TaskFilter
 from task_manager.tasks.forms import TaskForm
 from task_manager.tasks.models import Task
+from task_manager.users.models import User
 
 
 class TaskListView(LoginRequiredMixin, ListView):

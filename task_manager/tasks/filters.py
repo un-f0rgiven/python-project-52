@@ -1,5 +1,4 @@
 import django_filters
-from django import forms
 
 from task_manager.labels.models import Label
 from task_manager.statuses.models import Status
