@@ -16,7 +16,8 @@ class TaskListView(BaseListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['filter'] = TaskFilter()
+        context['filter'] = TaskFilter(self.request.GET, user=self.request.user)
+        context['object_list'] = context['filter'].qs
         return context
 
 class TaskCreateView(BaseCreateView):
