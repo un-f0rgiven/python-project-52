@@ -4,10 +4,10 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
-class BaseListView(LoginRequiredMixin, ListView):
+class BaseListView(ListView):
     context_object_name = 'items'
 
-class BaseCreateView(LoginRequiredMixin, CreateView):
+class BaseCreateView(CreateView):
     
     def form_valid(self, form):
         messages.success(self.request, self.get_success_message())
