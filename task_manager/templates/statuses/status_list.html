@@ -22,11 +22,11 @@
         </tr>
       </thead>
       <tbody>
-          {% for status in statuses %}
+          {% for status in items %}
             <tr>
               <td>{{ status.id }}</td>
               <td>{{ status.name}}</td>
-              <td>{{ status.created_at|date:"d.m.Y H:i" }}</td>
+              <td>{{ status.created_at }}</td>
               <td>
                 <a href="{% url 'status_update' status.pk %}">Изменить</a>
                 <br>
