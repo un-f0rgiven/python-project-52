@@ -117,6 +117,8 @@ else:
         }
     }
 
+AUTH_USER_MODEL = 'users.User'
+
 # Authentication
 
 LOGIN_URL = 'user_login'

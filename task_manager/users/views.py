@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from django.contrib.auth.models import User
+from task_manager.users.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect
 from django.views import View
