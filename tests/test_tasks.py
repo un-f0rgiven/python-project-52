@@ -80,7 +80,7 @@ class TaskViewsTests(TestCase):
         )
 
     def test_task_delete_view_no_permission(self):
-        another_user = User.objects.create_user(username='otheruser', password='otherpass')
+        User.objects.create_user(username='otheruser', password='otherpass')
         self.client.logout()
         self.client.login(username='otheruser', password='otherpass')
 

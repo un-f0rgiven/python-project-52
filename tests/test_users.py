@@ -1,11 +1,10 @@
 from django.contrib.messages import get_messages
 from django.test import Client, TestCase
 from django.urls import reverse
-import logging
 
 from task_manager.users.models import User
 
-logger = logging.getLogger(__name__)
+
 class UserViewsTests(TestCase):
     fixtures = ['fixtures/initial_data.json']
 
@@ -32,11 +31,15 @@ class UserViewsTests(TestCase):
         self.assertRedirects(response, reverse('user_login'))
         self.assertTrue(User.objects.filter(username='new_user').exists())
         messages = list(get_messages(response.wsgi_request))
-        self.assertEqual(str(messages[0]), 'Пользователь успешно зарегистрирован.')
+        self.assertEqual(
+            str(messages[0]), 'Пользователь успешно зарегистрирован.'
+        )
 
     def test_user_update_view(self):
         self.client.login(username='test_user', password='testpass')
-        response = self.client.post(reverse('user_update', kwargs={'pk': self.user.pk}), {
+        response = self.client.post(reverse(
+            'user_update', kwargs={'pk': self.user.pk}
+        ), {
             'username': 'updated_user',
             'first_name': 'Updated',
             'last_name': 'User',
@@ -51,7 +54,9 @@ class UserViewsTests(TestCase):
     
     def test_user_update_view_unauthorized(self):
         self.client.login(username='another_test_user', password='password')
-        response = self.client.post(reverse('user_update', kwargs={'pk': self.user.pk}), {
+        response = self.client.post(reverse(
+            'user_update', kwargs={'pk': self.user.pk}
+        ), {
             'username': 'unauthorized_update',
             'first_name': 'Unauthorized',
             'last_name': 'User',
@@ -65,7 +70,9 @@ class UserViewsTests(TestCase):
 
     def test_user_delete_other_user(self):
         self.client.login(username='test_user', password='testpass')
-        response = self.client.post(reverse('user_delete', kwargs={'pk': self.another_user.pk}))
+        response = self.client.post(reverse(
+            'user_delete', kwargs={'pk': self.another_user.pk})
+        )
         self.assertEqual(response.status_code, 302)
         self.assertTrue(User.objects.filter(pk=self.another_user.pk).exists())
         messages = list(get_messages(response.wsgi_request))
@@ -74,7 +81,9 @@ class UserViewsTests(TestCase):
 
     def test_user_delete_self(self):
         self.client.login(username='test_user', password='testpass')
-        response = self.client.post(reverse('user_delete', kwargs={'pk': self.user.pk}))
+        response = self.client.post(reverse(
+            'user_delete', kwargs={'pk': self.user.pk})
+        )
         self.assertRedirects(response, reverse('user_list'))
         self.assertFalse(User.objects.filter(pk=self.user.pk).exists())
         messages = list(get_messages(response.wsgi_request))
@@ -89,7 +98,7 @@ class UserViewsTests(TestCase):
         self.assertTrue(response.wsgi_request.user.is_authenticated)
 
     def test_user_logout_view(self):
-        self.client.login(username='test_user', password='pbkdf2_sha256$870000$bgAfNBP3fmYuACcCr8ijb6$JFsSoBFJyCr+MredmYUpeVnNc/QKcxJ4rLP0/rziY/Q=')
+        self.client.login(username='test_user', password='testpass')
         response = self.client.post(reverse('user_logout'))
         self.assertRedirects(response, reverse('index'))
         self.assertFalse(response.wsgi_request.user.is_authenticated)
