@@ -25,11 +25,11 @@
         </tr>
       </thead>
       <tbody>
-          {% for label in labels %}
+          {% for label in items %}
             <tr>
               <td>{{ label.id }}</td>
               <td>{{ label.name}}</td>
-              <td>{{ label.date_joined|date:"d.m.Y H:i" }}</td>
+              <td>{{ label.created_at }}</td>
               <td>
                 <a href="{% url 'label_update' label.pk %}">Изменить</a>
                 <br>

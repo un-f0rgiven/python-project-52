@@ -1,55 +1,43 @@
-from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
-from django.urls import reverse
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView
-
+from task_manager.base_views import BaseListView, BaseCreateView, BaseUpdateView, BaseDeleteView
 from task_manager.labels.forms import LabelForm
 from task_manager.labels.models import Label
 
-
-class LabelListView(LoginRequiredMixin, ListView):
+class LabelListView(BaseListView):
     model = Label
     template_name = 'labels/label_list.html'
-    context_object_name = 'labels'
+    success_url = '/labels/'
 
-
-class LabelBaseView(LoginRequiredMixin):
+class LabelCreateView(BaseCreateView):
     model = Label
     form_class = LabelForm
-    success_url = 'label_list'
-
-    def get_success_url(self):
-        return reverse(self.success_url)
-
-
-class LabelCreateView(LabelBaseView, CreateView):
     template_name = 'labels/label_create.html'
+    success_url = '/labels/'
 
-    def form_valid(self, form):
-        messages.success(self.request, 'Метка успешно создана.')
-        return super().form_valid(form)
+    def get_success_message(self):
+        return 'Метка успешно создана.'
+    
+    def get_error_message(self):
+        return 'Невозможно создать метку'
 
-
-class LabelUpdateView(LabelBaseView, UpdateView):
+class LabelUpdateView(BaseUpdateView):
+    model = Label
+    form_class = LabelForm
     template_name = 'labels/label_update.html'
+    success_url = '/labels/'
 
-    def form_valid(self, form):
-        messages.success(self.request, 'Метка успешно изменена')
-        return super().form_valid(form)
+    def get_success_message(self):
+        return 'Метка успешно изменена'
+    
+    def get_error_message(self):
+        return 'Невозможно изменить метку'
 
-
-class LabelDeleteView(LabelBaseView, DeleteView):
+class LabelDeleteView(BaseDeleteView):
+    model = Label
     template_name = 'labels/label_confirm_delete.html'
+    success_url = '/labels/'
 
-    def dispatch(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super().dispatch(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        if self.object.tasks.exists():
-            messages.error(request, 'Невозможно удалить метку')
-            return redirect(self.get_success_url())
-
-        messages.success(request, 'Метка успешно удалена')
-        return super().delete(request, *args, **kwargs)
+    def get_success_message(self):
+        return 'Метка успешно удалена'
+    
+    def get_error_message(self):
+        return 'Невозможно удалить метку'

@@ -15,7 +15,6 @@ class LabelViewsTests(TestCase):
         self.client = Client()
         self.user = User.objects.get(username='test_user')
         self.client.login(username='test_user', password='testpass')
-
         self.label = Label.objects.create(name='Important')
 
     def test_label_list_view(self):
