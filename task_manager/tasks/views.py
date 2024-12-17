@@ -17,31 +17,33 @@ from task_manager.tasks.models import Task
 from task_manager.users.models import User
 
 
-class TaskListView(LoginRequiredMixin, ListView):
+class TaskBaseView(LoginRequiredMixin):
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['statuses'] = Status.objects.all()
+        context['executors'] = User.objects.all()
+        context['labels'] = Label.objects.all()
+        return context
+
+
+class TaskListView(TaskBaseView, ListView):
     model = Task
     template_name = 'tasks/task_list.html'
     context_object_name = 'tasks'
 
     def get_queryset(self):
         tasks = Task.objects.all()
-        task_filter = TaskFilter(
-            self.request.GET, queryset=tasks, user=self.request.user
-        )
+        task_filter = TaskFilter(self.request.GET, queryset=tasks, user=self.request.user)
         return task_filter.qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        tasks = self.get_queryset()
-        context['filter'] = TaskFilter(
-            self.request.GET, queryset=tasks, user=self.request.user
-        )
-        context['statuses'] = Status.objects.all()
-        context['labels'] = Label.objects.all()
-        context['executors'] = User.objects.all()
+        context['filter'] = TaskFilter(self.request.GET, queryset=self.get_queryset(), user=self.request.user)
         return context
 
 
-class TaskCreateView(LoginRequiredMixin, CreateView):
+class TaskCreateView(TaskBaseView, CreateView):
     form_class = TaskForm
     template_name = 'tasks/task_create.html'
     success_url = '/tasks/'
@@ -51,15 +53,8 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
         messages.success(self.request, 'Задача успешно создана')
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['statuses'] = Status.objects.all()
-        context['executors'] = User.objects.all()
-        context['labels'] = Label.objects.all()
-        return context
 
-
-class TaskUpdateView(LoginRequiredMixin, UpdateView):
+class TaskUpdateView(TaskBaseView, UpdateView):
     model = Task
     form_class = TaskForm
     template_name = 'tasks/task_update.html'
@@ -69,15 +64,8 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
         messages.success(self.request, 'Задача успешно изменена.')
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['statuses'] = Status.objects.all()
-        context['executors'] = User.objects.all()
-        context['labels'] = Label.objects.all()
-        return context
 
-
-class TaskDeleteView(LoginRequiredMixin, DeleteView):
+class TaskDeleteView(TaskBaseView, DeleteView):
     model = Task
     template_name = 'tasks/task_confirm_delete.html'
     success_url = '/tasks/'
@@ -94,6 +82,6 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
         return super().delete(request, *args, **kwargs)
 
 
-class TaskShowView(LoginRequiredMixin, DetailView):
+class TaskShowView(TaskBaseView, DetailView):
     model = Task
     template_name = 'tasks/task_show.html'
