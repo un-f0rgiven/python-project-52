@@ -10,7 +10,6 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
-django = "^5.1.2"
 gunicorn = "^23.0.0"
 django-bootstrap5 = "^24.3"
 pytest-django = "^4.9.0"
@@ -22,6 +21,7 @@ dj-database-url = "^2.3.0"
 django-filter = "^24.3"
 isort = "^5.13.2"
 ruff = "^0.8.2"
+django = "^5.1.4"
 
 
 [build-system]
