@@ -1,11 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
-from django.urls import reverse
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+
 
 class BaseListView(ListView):
     context_object_name = 'items'
+
 
 class BaseCreateView(CreateView):
     
@@ -16,6 +17,7 @@ class BaseCreateView(CreateView):
     def get_success_message(self):
         return f'{self.model.__name__} успешно создан.'
 
+
 class BaseUpdateView(LoginRequiredMixin, UpdateView):
     
     def form_valid(self, form):
@@ -24,6 +26,7 @@ class BaseUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_message(self):
         return f'{self.model.__name__} успешно изменен.'
+
 
 class BaseDeleteView(LoginRequiredMixin, DeleteView):
     

@@ -1,13 +1,19 @@
-from django.views.generic.detail import DetailView
-from task_manager.base_views import BaseListView, BaseCreateView, BaseUpdateView, BaseDeleteView
-from task_manager.tasks.forms import TaskForm
-from task_manager.tasks.models import Task
-from task_manager.tasks.filters import TaskFilter
-from django.contrib.auth.mixins import UserPassesTestMixin
-from django.shortcuts import get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.views.generic.detail import DetailView
+
+from task_manager.base_views import (
+    BaseCreateView,
+    BaseDeleteView,
+    BaseListView,
+    BaseUpdateView,
+)
+from task_manager.tasks.filters import TaskFilter
+from task_manager.tasks.forms import TaskForm
+from task_manager.tasks.models import Task
+
 
 class TaskListView(BaseListView):
     model = Task
@@ -19,6 +25,7 @@ class TaskListView(BaseListView):
         context['filter'] = TaskFilter(self.request.GET, user=self.request.user)
         context['object_list'] = context['filter'].qs
         return context
+
 
 class TaskCreateView(BaseCreateView):
     model = Task
@@ -36,6 +43,7 @@ class TaskCreateView(BaseCreateView):
     def get_error_message(self):
         return 'Невозможно создать задачу'
 
+
 class TaskUpdateView(BaseUpdateView):
     model = Task
     form_class = TaskForm
@@ -48,6 +56,7 @@ class TaskUpdateView(BaseUpdateView):
     def get_error_message(self):
         return 'Невозможно изменить задачу'
 
+
 class TaskDeleteView(UserPassesTestMixin, BaseDeleteView):
     model = Task
     template_name = 'tasks/task_confirm_delete.html'
@@ -58,7 +67,7 @@ class TaskDeleteView(UserPassesTestMixin, BaseDeleteView):
         return task.author == self.request.user
 
     def dispatch(self, request, *args, **kwargs):
-        task = self.get_object()
+        self.get_object()
         if not self.test_func():
             messages.error(request, "Задачу может удалить только ее автор")
             return redirect(reverse('task_list'))
@@ -69,6 +78,7 @@ class TaskDeleteView(UserPassesTestMixin, BaseDeleteView):
     
     def get_error_message(self):
         return 'Невозможно удалить задачу'
+
 
 class TaskShowView(DetailView):
     model = Task

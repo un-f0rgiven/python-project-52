@@ -66,7 +66,10 @@ class UserViewsTests(TestCase):
         self.assertEqual(self.user.username, 'test_user')
         self.assertRedirects(response, reverse('user_list'))
         messages = list(get_messages(response.wsgi_request))
-        self.assertEqual(str(messages[0]), 'У вас нет прав для изменения другого пользователя.')
+        self.assertEqual(
+            str(messages[0]),
+            'У вас нет прав для изменения другого пользователя.'
+        )
 
     def test_user_delete_other_user(self):
         self.client.login(username='test_user', password='testpass')
@@ -77,7 +80,10 @@ class UserViewsTests(TestCase):
         self.assertTrue(User.objects.filter(pk=self.another_user.pk).exists())
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertEqual(str(messages[0]), 'У вас нет прав для изменения другого пользователя.')
+        self.assertEqual(
+            str(messages[0]),
+            'У вас нет прав для изменения другого пользователя.'
+        )
 
     def test_user_delete_self(self):
         self.client.login(username='test_user', password='testpass')

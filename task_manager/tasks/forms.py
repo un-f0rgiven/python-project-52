@@ -1,8 +1,10 @@
 from django import forms
+
 from task_manager.labels.models import Label
 from task_manager.statuses.models import Status
 from task_manager.tasks.models import Task
 from task_manager.users.models import User
+
 
 class BaseTaskForm(forms.ModelForm):
     name = forms.CharField(max_length=30, required=True, label='Имя')
@@ -39,5 +41,7 @@ class TaskForm(BaseTaskForm):
     def clean_name(self):
         name = self.cleaned_data.get('name')
         if len(name) < 3:
-            raise forms.ValidationError('Имя задачи должно содержать как минимум 3 символа.')
+            raise forms.ValidationError(
+                'Имя задачи должно содержать как минимум 3 символа.'
+            )
         return name

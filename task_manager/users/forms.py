@@ -1,13 +1,18 @@
 import re
+
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.exceptions import ValidationError
+
 from task_manager.users.models import User
+
 
 class UserBaseForm(forms.ModelForm):
     first_name = forms.CharField(max_length=30, required=True, label='Имя')
     last_name = forms.CharField(max_length=30, required=True, label='Фамилия')
-    username = forms.CharField(max_length=150, required=True, label='Имя пользователя')
+    username = forms.CharField(
+        max_length=150, required=True, label='Имя пользователя'
+    )
 
     class Meta:
         model = User
@@ -27,14 +32,20 @@ class UserBaseForm(forms.ModelForm):
                 'Имя пользователя может содержать '
                 'только буквы, цифры и символы @/./+/-/_.'
             )
-        if User.objects.exclude(pk=self.instance.pk).filter(username=username).exists():
+        if User.objects.exclude(
+            pk=self.instance.pk
+        ).filter(
+            username=username
+        ).exists():
             raise ValidationError('Пользователь с таким именем уже существует.')
         return username
 
 
 class UserCreateForm(UserBaseForm, UserCreationForm):
     password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Подтверждение пароля', widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label='Подтверждение пароля', widget=forms.PasswordInput
+    )
 
     class Meta(UserBaseForm.Meta):
         fields = UserBaseForm.Meta.fields + ['password1', 'password2']
@@ -51,8 +62,12 @@ class UserCreateForm(UserBaseForm, UserCreationForm):
 
 
 class UserUpdateForm(UserBaseForm):
-    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput, required=False)
-    password2 = forms.CharField(label='Подтверждение пароля', widget=forms.PasswordInput, required=False)
+    password1 = forms.CharField(
+        label='Пароль', widget=forms.PasswordInput, required=False
+    )
+    password2 = forms.CharField(
+        label='Подтверждение пароля', widget=forms.PasswordInput, required=False
+    )
 
     class Meta(UserBaseForm.Meta):
         fields = UserBaseForm.Meta.fields + ['password1', 'password2']
@@ -74,7 +89,9 @@ class UserUpdateForm(UserBaseForm):
 
 
 class UserLoginForm(AuthenticationForm):
-    username = forms.CharField(max_length=150, required=True, label='Имя пользователя')
+    username = forms.CharField(
+        max_length=150, required=True, label='Имя пользователя'
+    )
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
 
     class Meta:

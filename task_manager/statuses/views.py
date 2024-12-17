@@ -1,11 +1,18 @@
-from task_manager.base_views import BaseListView, BaseCreateView, BaseUpdateView, BaseDeleteView
+from task_manager.base_views import (
+    BaseCreateView,
+    BaseDeleteView,
+    BaseListView,
+    BaseUpdateView,
+)
 from task_manager.statuses.forms import StatusForm
 from task_manager.statuses.models import Status
+
 
 class StatusListView(BaseListView):
     model = Status
     template_name = 'statuses/status_list.html'
     success_url = '/statuses/'
+
 
 class StatusCreateView(BaseCreateView):
     model = Status
@@ -19,6 +26,7 @@ class StatusCreateView(BaseCreateView):
     def get_error_message(self):
         return 'Невозможно создать статус'
 
+
 class StatusUpdateView(BaseUpdateView):
     model = Status
     form_class = StatusForm
@@ -30,6 +38,7 @@ class StatusUpdateView(BaseUpdateView):
     
     def get_error_message(self):
         return 'Невозможно изменить статус'
+
 
 class StatusDeleteView(BaseDeleteView):
     model = Status
