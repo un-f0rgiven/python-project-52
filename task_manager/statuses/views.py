@@ -49,7 +49,7 @@ class StatusDeleteView(LoginRequiredMixin, DeleteView):
             messages.error(request, 'Невозможно удалить статус')
             return redirect('status_list')
 
-        messages.success(request, 'Статус успешно удалена')
+        messages.success(request, 'Статус успешно удален')
         return super().delete(request, *args, **kwargs)
 
 
