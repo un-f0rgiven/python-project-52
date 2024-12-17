@@ -39,7 +39,7 @@ class UserUpdateView(UpdateView):
     def dispatch(self, request, *args, **kwargs):
         user = self.get_object()
         if request.user != user:
-            messages.error(request, 'У вас нет прав для изменения другого пользователя.')
+            messages.error(request, 'Вы не можете удалить другого пользователя.')
             return redirect('user_list')
         return super().dispatch(request, *args, **kwargs)
     
