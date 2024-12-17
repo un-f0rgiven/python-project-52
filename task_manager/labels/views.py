@@ -41,15 +41,13 @@ class LabelDeleteView(LoginRequiredMixin, DeleteView):
     success_url = '/labels/'
 
     def dispatch(self, request, *args, **kwargs):
-        label = self.get_object()
-        if label.tasks.exists():
-            messages.error(
-                request,
-                'Невозможно удалить метку, т.к. она связана с задачей.'
-            )
-            return redirect('label_list')
+        self.object = self.get_object()
         return super().dispatch(request, *args, **kwargs)
-
+    
     def post(self, request, *args, **kwargs):
-        messages.success(request, 'Метка успешно удалена')
+        if self.object.tasks.exists():
+            messages.error(request, 'Невозможно удалить метку')
+            return redirect('status_list')
+
+        messages.success(request, 'Метка успешно удален')
         return super().delete(request, *args, **kwargs)
