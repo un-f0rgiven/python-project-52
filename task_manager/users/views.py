@@ -71,6 +71,9 @@ class UserDeleteView(UserPassesTestMixin, BaseDeleteView):
             )
             return False
         return True
+    
+    def handle_no_permission(self):
+        return redirect('user_list')
 
     def get_success_message(self):
         return 'Пользователь успешно удален'
