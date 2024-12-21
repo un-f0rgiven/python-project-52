@@ -1,18 +1,26 @@
 import re
+
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.exceptions import ValidationError
+
 from task_manager.users.models import User
 
 USERNAME_REGEX = r'^[\w.@+-]+$'
 
+
 class UserCreateForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=True, label='Имя')
     last_name = forms.CharField(max_length=30, required=True, label='Фамилия')
+    username = forms.CharField(
+        max_length=30, required=True, label='Имя пользователя'
+    )
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'password1', 'password2']
+        fields = [
+            'first_name', 'last_name', 'username', 'password1', 'password2'
+        ]
 
     def __init__(self, *args, **kwargs):
         super(UserCreateForm, self).__init__(*args, **kwargs)
@@ -53,7 +61,9 @@ class UserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'password1', 'password2']
+        fields = [
+            'first_name', 'last_name', 'username', 'password1', 'password2'
+        ]
 
     def __init__(self, *args, **kwargs):
         super(UserUpdateForm, self).__init__(*args, **kwargs)
