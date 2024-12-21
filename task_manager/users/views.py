@@ -46,7 +46,8 @@ class UserUpdateView(UserPassesTestMixin, BaseUpdateView):
         obj = self.get_object()
         if self.request.user != obj:
             messages.error(
-                self.request, "У вас нет прав для изменения другого пользователя."
+                self.request,
+                "У вас нет прав для изменения другого пользователя."
             )
             return False
         return True
@@ -67,7 +68,8 @@ class UserDeleteView(UserPassesTestMixin, BaseDeleteView):
         obj = self.get_object()
         if self.request.user != obj:
             messages.error(
-                self.request, "У вас нет прав для изменения другого пользователя."
+                self.request,
+                "У вас нет прав для изменения другого пользователя."
             )
             return False
         return True
