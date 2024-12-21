@@ -13,7 +13,7 @@ start:
 	poetry run gunicorn -w 5 -b 0.0.0.0:$$PORT task_manager.wsgi:application
 
 test:
-	poetry run pytest
+	poetry run python manage.py test
 
 lint:
 	poetry run flake8

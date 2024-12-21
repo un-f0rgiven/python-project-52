@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
@@ -35,38 +36,38 @@ class UserCreateView(BaseCreateView):
         return 'Невозможно изменить пользователя'
 
 
-class UserUpdateView(BaseUpdateView):
+class UserUpdateView(UserPassesTestMixin, BaseUpdateView):
     model = User
     form_class = UserUpdateForm
     template_name = 'users/user_update.html'
     success_url = reverse_lazy('user_list')
 
-    def dispatch(self, request, *args, **kwargs):
+    def test_func(self):
         obj = self.get_object()
-        if request.user != obj:
+        if self.request.user != obj:
             messages.error(
-                request, "У вас нет прав для изменения другого пользователя."
+                self.request, "У вас нет прав для изменения другого пользователя."
             )
-            return redirect('user_list')
-        return super().dispatch(request, *args, **kwargs)
+            return False
+        return True
 
     def get_success_message(self):
         return 'Пользователь успешно изменен'
 
 
-class UserDeleteView(BaseDeleteView):
+class UserDeleteView(UserPassesTestMixin, BaseDeleteView):
     model = User
     template_name = 'users/user_confirm_delete.html'
     success_url = reverse_lazy('user_list')
 
-    def dispatch(self, request, *args, **kwargs):
+    def test_func(self):
         obj = self.get_object()
-        if request.user != obj:
+        if self.request.user != obj:
             messages.error(
-                request, "У вас нет прав для изменения другого пользователя."
+                self.request, "У вас нет прав для удаления другого пользователя."
             )
-            return redirect('user_list')
-        return super().dispatch(request, *args, **kwargs)
+            return False
+        return True
 
     def get_success_message(self):
         return 'Пользователь успешно удален'
@@ -90,4 +91,3 @@ class UserLogoutView(LogoutView):
     def get_success_url(self):
         messages.success(self.request, 'Вы разлогинены')
         return reverse_lazy('index')
-    
