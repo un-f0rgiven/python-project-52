@@ -1,6 +1,6 @@
 from django.contrib import messages
-from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
@@ -50,6 +50,9 @@ class UserUpdateView(UserPassesTestMixin, BaseUpdateView):
             )
             return False
         return True
+    
+    def handle_no_permission(self):
+        return redirect('user_list')
 
     def get_success_message(self):
         return 'Пользователь успешно изменен'
